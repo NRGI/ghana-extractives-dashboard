@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
+import 'bulma/css/bulma.css';
 import './App.css';
 import axios from 'axios';
+import NavigationComponent from './components/NavigationComponent';
+import HeroComponent from './components/HeroComponent';
+import BodyComponent from './components/BodyComponent';
+import FooterComponent from './components/FooterComponent';
+
 class App extends Component {
   
   componentDidMount(){
@@ -16,10 +22,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Ghana Extracives Dashboard</h1>
-        </header>
-        {JSON.stringify(this.state.data)}
+        <NavigationComponent />
+        <HeroComponent />
+        <BodyComponent data={this.state.data}/>
+        <FooterComponent />
       </div>
     );
   }
