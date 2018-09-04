@@ -49,12 +49,11 @@ export const loadAllData = () => {
   // const publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1pXtvMC2OWBAjJvyGcQmBWBigqoPo3YaS4XnHbw_YhrM/edit#gid=1425666376';
   const publicSpreadsheetUrl = 'https://docs.google.com/spreadsheets/d/1pXtvMC2OWBAjJvyGcQmBWBigqoPo3YaS4XnHbw_YhrM/pubhtml';
   const promises = [];
-  const data = {};
   
   files.forEach(function(url) {
     promises.push(d3.csv(url))
   });
-
+  
   promises.push(
     Tabletop.init( { key: publicSpreadsheetUrl,
       callback: (data) => promises.push(data),
@@ -63,14 +62,17 @@ export const loadAllData = () => {
   )
 
   
-  Promise.all(promises).then(function(values) {
-    data.companyPayments = values[0];
-    data.govtAgencies = values[1];
-    data.commoditiesTabletopObj = values[2];
-    // console.log(data);
+  return Promise.all(promises).then(function(values) {
+    const result = {};  
+    result.companyPayments = values[0];
+    result.govtAgencies = values[1];
+    result.commoditiesTabletopObj = values[2];
+    console.log(result);
+    return result;
   });
-
-  return data;
+  
+  // return data;
+  
   // d3.queue()
   //   .defer(d3.csv, '')
   //   .defer(d3.csv, '')

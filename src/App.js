@@ -14,23 +14,17 @@ class App extends Component {
     data: []
   }
   
-  componentWillMount(){
-    this.getData();
-  }
 
   componentDidMount() {
-    console.log(this.state);
+    console.log('componentDidMount')
+    this.getData()
   }
 
   
   getData(){
-    // axios.get('https://www.resourcedata.org/api/3/action/datastore_search?resource_id=9ddd590c-7d62-42b4-8744-868c481d58ae')
-    //   .then(data=>this.setState({data: data}))
-    //   .catch(error => alert(error))
-    //   .then(()=>console.log(this.state.data))
-
-    // loadAllData(data => this.setState({data: data}));
-    this.setState({data: loadAllData()});
+    loadAllData()
+      .then(data=>
+        this.setState({data:data}))
   }
 
   render() {
