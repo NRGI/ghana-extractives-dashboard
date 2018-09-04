@@ -9,23 +9,23 @@ const sections = [
   },
   {
     path: '#',
-    name: 'Commodities'
+    name: 'Total Revenues by Commodity'
   },
   {
     path: '#',
-    name: 'Companies'
+    name: 'Company Revenues by Commodity'
   },
   {
     path: '#',
-    name: 'Production'
+    name: 'Company Revenues by Revenue Type'
   },
   {
     path: '#',
-    name: 'Revenues'
+    name: 'Company and Government Revenue Flows'
   },
   {
     path: '#',
-    name: 'Data'
+    name: 'Company Revenue Comparisons'
   }
 ]
 
