@@ -34,7 +34,6 @@ export const loadAllData = () => {
 
   const reshapeCompanyPayments = (data) => {
     const reshapedData = data.map(d => {
-      console.log(handleGHSConversion(+d.currency_rate,+d.year), +d.currency_rate, +d.year);
       return {
         company_name: d.company_name,
         currency_rate: handleGHSConversion(+d.currency_rate,+d.year),
@@ -85,6 +84,34 @@ export const loadAllData = () => {
     return reshapedData;
   }
 
+  const getUniqueYears = data => _(data).map(d => d.year)
+                                        .uniq()
+                                        .value()
+                                        .sort();
+  
+  const getUniqueCompanies = data => _(data).map(d => d.company_name)
+                                            .uniq()
+                                            .value()
+                                            .sort();
+  
+  const getUniqueCommodities = data => _(data).map(d => d.commodity)
+                                              .uniq()
+                                              .value()
+                                              .sort();
+
+  const getNestedCommoditiesCompanies = (data, comp, comd) => {
+    return d3.nest()
+      .key(d => d.commodity).sortKeys(d3.ascending)
+      // .key(function(d) { return d.updated_name; }).sortKeys(d3.ascending)
+      .rollup( d => _(d).map(d => d.updated_name)
+                        .uniq()
+                        .value()
+                        .filter(d => d.length > 0)
+                        .sort() 
+      ) 
+      .object(data);
+  }
+
   // const snakeCaseConverter = d => d.replace(' ','_').toLowerCase();
 
   /** This converts second generation Ghanian  
@@ -107,6 +134,14 @@ export const loadAllData = () => {
     result.companyPayments = reshapeCompanyPayments(values[0]);
     result.govtAgencies = reshapeGovtAgencies(values[1]);
     result.commodities = reshapeCommodities(values[2]);
+    result.uniqueYears = getUniqueYears(result.companyPayments);
+    result.uniqueCompanies = getUniqueCompanies(result.companyPayments);
+    result.uniqueCommodities = getUniqueCommodities(result.commodities);
+    result.nestedCommoditiesCompanies = getNestedCommoditiesCompanies(
+      result.commodities,
+      result.uniqueCompanies,
+      result.uniqueCommodities
+    );
     console.log(result);
 
     return result;

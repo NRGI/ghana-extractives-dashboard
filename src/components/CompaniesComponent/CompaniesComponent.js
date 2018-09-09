@@ -3,7 +3,12 @@ import PropTypes from 'prop-types'
 import styles from './CompaniesComponent.scss'
 
 const CompaniesComponent = ({}) => (
-  <div className="CompaniesComponent"></div>
+  
+  <div className="CompaniesComponent">
+    <p>Companies Chart</p>
+  
+  </div>
+  
 );
 
 CompaniesComponent.propTypes = {}

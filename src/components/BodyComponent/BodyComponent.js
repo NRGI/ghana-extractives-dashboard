@@ -19,7 +19,7 @@ const BodyComponent = ({ data }) => (
         </div> */}
       </div>
       {/* <CommoditiesComponent /> */}
-      {/* <CompaniesComponent /> */}
+      <CompaniesComponent />
       {/* <ProductionComponent /> */}
       {/* <RevenuesComponent /> */}
       {/* <DataComponent /> */}
