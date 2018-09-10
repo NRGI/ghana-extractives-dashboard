@@ -29,7 +29,7 @@ const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter })
           companyPayments={companyPayments}
           handleClearCompanyFilters={handleClearCompanyFilters}
           handleCompanyFilter={handleCompanyFilter}
-          isLoading={!!data.companyPayments ? false : true}
+          isLoading={!!companyPayments.length ? false : true}
         />
         {/* <ProductionComponent /> */}
         {/* <RevenuesComponent /> */}

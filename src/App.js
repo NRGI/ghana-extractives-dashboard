@@ -27,14 +27,14 @@ class App extends Component {
           () => {
             // set mutated data to initial data on load so filters can access data changes
             this.setState({ mutatedData: this.state.data },
-              () => console.log(this.state.mutatedData === this.state.data))
+              () => console.log(`(mutatedData === data) : ${this.state.mutatedData === this.state.data}`))
           }
         ))
   }
 
   handleClearCompanyFilters() {
     this.setState({ mutatedData: this.state.data },
-      () => console.log(this.state.mutatedData.companyPayments)
+      // () => console.log(this.state.mutatedData.companyPayments)
     )
   }
   handleCompanyFilter(companyName, range) {
@@ -53,7 +53,9 @@ class App extends Component {
         ...this.state.mutatedData,
         companyPayments: [...filteredCompanyPayments]
       }
-    }, () => console.log(this.state.mutatedData.companyPayments))
+    },
+    // () => console.log(this.state.mutatedData.companyPayments)
+    )
 
   }
   render() {
