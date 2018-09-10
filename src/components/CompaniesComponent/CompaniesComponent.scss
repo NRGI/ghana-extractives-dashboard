@@ -1,1 +1,15 @@
-.CompaniesComponent{}
+.CompaniesComponent{
+  .svg-container{
+    width: 100%;
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: center;
+    align-items: center;
+    
+    .loading-bars{
+      display: flex;
+      width: 200px;
+      fill: rgba(0,0,0,.8);
+    }
+  }
+}
