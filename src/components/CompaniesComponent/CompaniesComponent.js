@@ -15,7 +15,8 @@ type CompaniesProps = {
   uniqueYears: [number],
   handleCompanyYearChange: Function,
   handleCompanySelectChange: Function,
-  handleClearCompanyFilters: Function
+  handleClearCompanyFilters: Function,
+  companyPayments: [object]
 }
 
 const formatter = (format) => {
@@ -26,6 +27,7 @@ const formatter = (format) => {
 }
 
 const CompaniesComponent = ({
+  companyPayments,
   uniqueCompanies = [],
   uniqueYears = [2004, 2014],
   handleClearCompanyFilters,
@@ -40,9 +42,8 @@ const CompaniesComponent = ({
       <div className="column">
         <p>Companies Chart</p>
         <div className="field has-addons">
-          <ReactSVG src={LoadingBar} svgClassName="loading-bars" />
           {!!isLoading
-            ? <ReactSVG src={LoadingBar} svgClassName="loading-bars" />
+            ? <ReactSVG src={LoadingBar} className="svg-container "svgClassName="loading-bars" />
             : <div className="column control">
               <Range allowCross={false}
                 defaultValue={[minYear, maxYear]}
@@ -63,6 +64,8 @@ const CompaniesComponent = ({
                 </select>
               </div>
               <button className="button" onClick={() => { handleClearCompanyFilters() }}>Clear</button>
+              <br/>
+              {JSON.stringify(companyPayments)}
             </div>
           }
         </div>

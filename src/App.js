@@ -31,14 +31,14 @@ class App extends Component {
           }
         ))
   }
-  
+
   handleClearCompanyFilters() {
     this.setState({ mutatedData: this.state.data },
-        ()=> console.log(this.state.mutatedData.companyPayments)
-      )
+      () => console.log(this.state.mutatedData.companyPayments)
+    )
   }
-  handleCompanyFilter(companyName, range){
-    
+  handleCompanyFilter(companyName, range) {
+
     const
       min = range[0] || 2004,
       max = range[1] || 2014;
@@ -47,16 +47,14 @@ class App extends Component {
       .filter(company => company.year >= min) // cut off minimum
       .filter(company => company.year <= max) // cutt off maximum
       .filter(company => companyName.length ? company.company_name === companyName : company) // if companyName is selected, filter it else return the array as is
-    
-      this.setState({
-        mutatedData: {
-          ...this.state.mutatedData,
-          companyPayments: {
-            ...this.state.mutatedData.companyPayments,
-            companyPayments: filteredCompanyPayments
-          }
-        }
-      }, ()=> console.log(this.state.mutatedData.companyPayments))
+      
+    this.setState({
+      mutatedData: {
+        ...this.state.mutatedData,
+        companyPayments: [...filteredCompanyPayments]
+      }
+    }, () => console.log(this.state.mutatedData.companyPayments))
+
   }
   render() {
     return (
@@ -64,7 +62,7 @@ class App extends Component {
         <NavigationComponent />
         <HeroComponent />
         <BodyComponent
-          data={this.state.data}
+          data={this.state.mutatedData}
           handleClearCompanyFilters={this.handleClearCompanyFilters.bind(this)}
           handleCompanyFilter={this.handleCompanyFilter.bind(this)}
         />

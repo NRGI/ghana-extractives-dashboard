@@ -8,7 +8,7 @@ import RevenuesComponent from '../RevenuesComponent'
 import DataComponent from '../DataComponent'
 
 const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter }) => {
-  const { uniqueCompanies, uniqueYears } = data;
+  const { uniqueCompanies, uniqueYears, companyPayments } = data;
   return (
     <div className="BodyComponent">
       <div className="container">
@@ -26,9 +26,10 @@ const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter })
         <CompaniesComponent
           uniqueCompanies={uniqueCompanies}
           uniqueYears={uniqueYears}
+          companyPayments={companyPayments}
           handleClearCompanyFilters={handleClearCompanyFilters}
           handleCompanyFilter={handleCompanyFilter}
-          isLoading={ !!data.companyPayments ? false : true }
+          isLoading={!!data.companyPayments ? false : true}
         />
         {/* <ProductionComponent /> */}
         {/* <RevenuesComponent /> */}
