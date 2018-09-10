@@ -142,7 +142,7 @@ export const loadAllData = () => {
       result.uniqueCompanies,
       result.uniqueCommodities
     );
-    console.log(result);
+    // console.log(result);
 
     return result;
   });
