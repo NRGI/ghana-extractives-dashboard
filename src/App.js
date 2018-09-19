@@ -33,12 +33,14 @@ class App extends Component {
   }
 
   handleClearCompanyFilters() {
-    this.setState({ mutatedData: this.state.data },
-      // () => console.log(this.state.mutatedData.companyPayments)
-    )
+    this.setState({
+      mutatedData: {
+        ...this.state.mutatedData,
+        companyPayments: this.state.data.companyPayments
+      }
+    })
   }
   handleCompanyFilter(companyName, range) {
-
     const
       min = range[0] || 2004,
       max = range[1] || 2014;
@@ -53,10 +55,7 @@ class App extends Component {
         ...this.state.mutatedData,
         companyPayments: [...filteredCompanyPayments]
       }
-    },
-    // () => console.log(this.state.mutatedData.companyPayments)
-    )
-
+    })
   }
   render() {
     return (

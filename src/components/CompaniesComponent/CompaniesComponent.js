@@ -43,6 +43,7 @@ class CompaniesComponent extends Component {
   handleClear = () => {
     const { handleClearCompanyFilters } = this.props;
     handleClearCompanyFilters()
+    this.refs.company_select.value = '';
   }
 
   static defaultProps = {
@@ -79,7 +80,7 @@ class CompaniesComponent extends Component {
                   pushable={true}
                 />
                 <div className="select">
-                  <select onChange={(event) => this.setState({ companyName: event.target.value }, () => this.handleChange())} defaultValue="">
+                  <select ref="company_select" onChange={(event) => this.setState({ companyName: event.target.value }, () => this.handleChange())} defaultValue="">
                     <option value="">No Filters</option>
                     {uniqueCompanies.map((company, index) => <option key={index} value={company}>{company}</option>)}
                   </select>
