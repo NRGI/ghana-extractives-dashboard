@@ -32,10 +32,10 @@ export const loadAllData = () => {
     )
   )
 
-  const reshapeCompanyPayments = (data) => {
+  const reshapeCompanyPayments = (data,updatedNameLookUpSource) => {
     const reshapedData = data.map(d => {
       return {
-        company_name: d.company_name,
+        company_name: _.find(updatedNameLookUpSource.rows, o => o[2] === d.company_name)[3],
         currency_rate: handleGHSConversion(+d.currency_rate,+d.year),
         value_reported: handleGHSConversion(+d.value_reported,+d.year),
         value_reported_as_USD: +d.value_reported_as_USD,
@@ -47,6 +47,12 @@ export const loadAllData = () => {
       } 
     });
     return reshapedData;
+  }
+
+  const lookupName = (updatedNameLookUpSource,company_name) => {
+    // lookup updated company name from updatedNameLookUpSource.rows updated name is column 3
+    //  old name is column 2
+    updatedNameLookUpSource, o => o[2] === company_name)[3];
   }
 
   const reshapeGovtAgencies = (data) => {
@@ -131,7 +137,7 @@ export const loadAllData = () => {
   
   return Promise.all(promises).then(function(values) {
     const result = {};  
-    result.companyPayments = reshapeCompanyPayments(values[0]);
+    result.companyPayments = reshapeCompanyPayments(values[0],values[2]);
     result.govtAgencies = reshapeGovtAgencies(values[1]);
     result.commodities = reshapeCommodities(values[2]);
     result.uniqueYears = getUniqueYears(result.companyPayments);

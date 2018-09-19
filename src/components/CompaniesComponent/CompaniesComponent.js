@@ -6,6 +6,8 @@ import ReactSVG from 'react-svg'
 import LoadingBar from 'loading-svg/loading-bars.svg'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
+import StackedBarChart from '../StackedBarChart/StackedBarChart';
+import { nest } from 'd3-collection'
 
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -23,6 +25,14 @@ class CompaniesComponent extends Component {
       range: this.props.range,
       companyName: this.props.companyName
     }
+  }
+
+  prepChartData = () => {
+    console.log(this.props.companyPayments);
+    const nestedByYear = nest()
+      .key((d) => d.year).entries(this.props.companyPayments);
+    console.log(nestedByYear);
+    return this.props.companyPayments.map(d => d.value_reported);
   }
 
   handleChange = () => {
@@ -76,7 +86,8 @@ class CompaniesComponent extends Component {
                 </div>
                 <button className="button" onClick={() => this.handleClear()}>Clear</button>
                 <br />
-                {JSON.stringify(companyPayments)}
+                <StackedBarChart data={this.prepChartData()} size={[500,500]} />
+                {/* {JSON.stringify(companyPayments)} */}
               </div>
             }
           </div>
