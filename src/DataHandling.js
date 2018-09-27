@@ -5,6 +5,8 @@ import sheetsy from 'sheetsy';
 
 export const loadAllData = () => {
 
+  const delimiter = ' | ';
+
   const { urlToKey, getWorkbook, getSheet } = sheetsy;
 
   const files = [
@@ -43,6 +45,7 @@ export const loadAllData = () => {
         name_of_revenue_stream: d.name_of_revenue_stream,
         gfs_code: d.gfs_code,
         gfs_description: d.gfs_description,
+        clean_revenue_stream: cleanPaymentStream(d.name_of_revenue_stream),
         org_id: getOrgId(d.reporting_url),
       } 
     });
@@ -67,6 +70,7 @@ export const loadAllData = () => {
         name_of_revenue_stream: d.name_of_revenue_stream,
         gfs_code: d.gfs_code,
         gfs_description: d.gfs_description,
+        clean_revenue_stream: cleanPaymentStream(d.name_of_revenue_stream),
         org_id: getOrgId(d.reporting_url),
       } 
     });
@@ -91,30 +95,47 @@ export const loadAllData = () => {
     return reshapedData;
   }
 
+  const cleanPaymentStream = (d) => {
+    const [first, ...rest] = d
+      .split('[')[1]
+      .split('] - ');
+    return first.charAt(0).toUpperCase() 
+      + first.slice(1).toLowerCase() 
+      + delimiter + rest.join('] - ').charAt(0).toUpperCase() 
+      + rest.join('] - ').slice(1).toLowerCase();
+  }
+
   const getUniqueYears = data => _(data).map(d => d.year)
-                                        .uniq()
-                                        .value()
-                                        .sort();
+    .uniq()
+    .value()
+    .sort();
   
   const getUniqueCompanies = data => _(data).map(d => d.company_name)
-                                            .uniq()
-                                            .value()
-                                            .sort();
-  
+    .uniq()
+    .value()
+    .sort();
+
   const getUniqueCommodities = data => _(data).map(d => d.commodity)
-                                              .uniq()
-                                              .value()
-                                              .sort();
+    .uniq()
+    .value()
+    .sort();
+
+  const getUniquePaymentStreams = data => _(data).flatten()
+    .map(d => cleanPaymentStream(d.name_of_revenue_stream))
+    .uniq()
+    .value()
+    .sort();
+
 
   const getNestedCommoditiesCompanies = (data, comp, comd) => {
     return d3.nest()
       .key(d => d.commodity).sortKeys(d3.ascending)
       // .key(function(d) { return d.updated_name; }).sortKeys(d3.ascending)
       .rollup( d => _(d).map(d => d.updated_name)
-                        .uniq()
-                        .value()
-                        .filter(d => d.length > 0)
-                        .sort() 
+        .uniq()
+        .value()
+        .filter(d => d.length > 0)
+        .sort() 
       ) 
       .object(data);
   }
@@ -144,12 +165,14 @@ export const loadAllData = () => {
     result.uniqueYears = getUniqueYears(result.companyPayments);
     result.uniqueCompanies = getUniqueCompanies(result.companyPayments);
     result.uniqueCommodities = getUniqueCommodities(result.commodities);
+    result.uniquePaymentStreams = getUniquePaymentStreams([result.companyPayments,result.govtAgencies]);
     result.nestedCommoditiesCompanies = getNestedCommoditiesCompanies(
       result.commodities,
       result.uniqueCompanies,
-      result.uniqueCommodities
+      result.uniqueCommodities,
+      result.uniquePaymentStreams,
     );
-    // console.log(result);
+    console.log(result);
 
     return result;
   });

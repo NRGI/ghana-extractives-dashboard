@@ -7,6 +7,7 @@ import HeroComponent from './components/HeroComponent';
 import BodyComponent from './components/BodyComponent';
 import FooterComponent from './components/FooterComponent';
 import { loadAllData } from './DataHandling';
+import { reusableNestedColorScale } from './Scales';
 
 class App extends Component {
 
@@ -66,6 +67,7 @@ class App extends Component {
           data={this.state.mutatedData}
           handleClearCompanyFilters={this.handleClearCompanyFilters.bind(this)}
           handleCompanyFilter={this.handleCompanyFilter.bind(this)}
+          reusableNestedColorScale={reusableNestedColorScale}
         />
         <FooterComponent />
       </div>

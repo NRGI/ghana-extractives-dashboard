@@ -7,8 +7,8 @@ import ProductionComponent from '../ProductionComponent'
 import RevenuesComponent from '../RevenuesComponent'
 import DataComponent from '../DataComponent'
 
-const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter }) => {
-  const { uniqueCompanies, uniqueYears, companyPayments } = data;
+const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter, reusableNestedColorScale }) => {
+  const { uniqueCompanies, uniqueYears, uniquePaymentStreams, companyPayments } = data;
   return (
     <div className="BodyComponent">
       <div className="container">
@@ -26,10 +26,14 @@ const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter })
         <CompaniesComponent
           uniqueCompanies={uniqueCompanies}
           uniqueYears={uniqueYears}
+          uniquePaymentStreams={uniquePaymentStreams}
           companyPayments={companyPayments}
+          reusableNestedColorScale={reusableNestedColorScale}
           handleClearCompanyFilters={handleClearCompanyFilters}
           handleCompanyFilter={handleCompanyFilter}
-          isLoading={!!companyPayments.length ? false : true}
+          isLoading={!!(companyPayments.length 
+            && uniquePaymentStreams.length)
+             ? false : true}
         />
         {/* <ProductionComponent /> */}
         {/* <RevenuesComponent /> */}
