@@ -8,6 +8,7 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
 import StackedBarChart from '../StackedBarChart/StackedBarChart';
 import { nest } from 'd3-collection';
+import { prepVarVsYearChartData } from '../../DataPrepHelpers';
 
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -19,7 +20,7 @@ const formatter = (format) => {
 }
 
 class CompaniesComponent extends Component {
-  constructor(props: CompaniesProps) {
+  constructor(props) {
     super(props);
     this.state = {
       range: this.props.range,
@@ -28,59 +29,52 @@ class CompaniesComponent extends Component {
   }
 
   prepChartData = () => {
-    console.log(this.props.companyPayments);
-    // this.props.nestedColorScale(this.props.uniquePaymentStreams);
+    const { companyName, range } = this.state;
 
-    // const nestedByPayment = nest()
-    //   .key((d) => d.name_of_revenue_stream).entries(this.props.companyPayments);
-    // console.log(nestedByPayment);
-    // const valuesByPayment = nestedByPayment.map(d => {
-    //   const values = {};
-    //   d.values.forEach(element => {
-    //     values[element.year] = values[element.year] ?
-    //        values[element.year] += element.value_reported : element.value_reported;
-    //   });
-    //   console.log( {
-    //     payment: d.key,
-    //     ...values
-    //   });
-    //   // return d;
-    //   return {
-    //     payment: d.key,
-    //     ...values
-    //   };
+    const chartData = this.handleCompanyFilter(companyName,range);
 
     const nestedByYear = nest()
-      .key((d) => +d.year).entries(this.props.companyPayments);
+      .key((d) => +d.year).entries(chartData);
     console.log(nestedByYear);
     const valuesByYear = nestedByYear.map(d => {
       const values = {};
       d.values.forEach(element => {
         values[element.clean_revenue_stream] = values[element.clean_revenue_stream] ?
-           values[element.clean_revenue_stream] += element.value_reported : element.value_reported;
+          values[element.clean_revenue_stream] += element.value_reported : element.value_reported;
       });
-      // console.log( {
-      //   key: +d.key,
-      //   values: values
-      // });
-      // return d;
       return {
         year: +d.key,
         ...values
       };
     });
-    // return this.props.companyPayments.map(d => d.value_reported);
     return valuesByYear;
+  }
+
+  handleClearFilters() {
+    const { companyName, range } = this.defaultProps;
+
+    this.setState({
+      companyName: companyName,
+      range: range
+    })
+  }
+  handleFilter(companyName, range) {
+    const
+      min = range[0] || 2004,
+      max = range[1] || 2014;
+    return this.props.companyPayments
+      .filter(company => company.year >= min) // cut off minimum
+      .filter(company => company.year <= max) // cutt off maximum
+      .filter(company => companyName.length ? company.company_name === companyName : company) // if companyName is selected, filter it else return the array as is
   }
 
   handleChange = () => {
     const { companyName, range } = this.state;
-    this.props.handleCompanyFilter(companyName, range);
+    this.handleFilter(companyName, range);
   }
 
   handleClear = () => {
-    const { handleClearCompanyFilters } = this.props;
-    handleClearCompanyFilters()
+    this.handleClearFilters()
     this.refs.company_select.value = this.props.companyName;
   }
 
@@ -90,7 +84,6 @@ class CompaniesComponent extends Component {
     companyName: ''
   }
   static propTypes = {
-    isLoading: PropTypes.bool,
     uniqueCompanies: PropTypes.arrayOf(PropTypes.string),
     uniqueYears: PropTypes.arrayOf(PropTypes.number),
     handleCompanyFilter: PropTypes.func,
@@ -100,9 +93,13 @@ class CompaniesComponent extends Component {
   }
 
   render() {
-    const { isLoading, uniqueCompanies, uniqueYears, uniquePaymentStreams, reusableNestedColorScale,
-      handleClearCompanyFilters, companyPayments } = this.props;
-    console.log(this.state);
+    const { uniqueCompanies, uniqueYears, 
+      uniquePaymentStreams, reusableNestedColorScale } = this.props;
+    // console.log(this.state);
+    // console.log(this.props);
+    const isLoading = !!(this.props.companyPayments.length) ? false : true;
+
+    console.log("rendering isLoading: " + !!isLoading);
     return (
       <div className="CompaniesComponent">
         <div className="column">
@@ -110,22 +107,23 @@ class CompaniesComponent extends Component {
           <div className="field has-addons">
             {!!isLoading
               ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
-              : <div className="column control">
+              : 
+                <div className="column control">
 
                 <Range allowCross={false}
                   defaultValue={[this.props.range[0], this.props.range[1]]}
                   min={this.props.range[0]}
                   max={this.props.range[1]}
                   tipFormatter={formatter()}
-                  onAfterChange={(range) => this.setState({ range }, () => this.handleChange())}
+                  onAfterChange={(range) => this.setState({ range })}
                   tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2 }}
                   pushable={true}
                 />
 
                 <div className="select">
-                  <select ref="company_select" 
-                    onChange={(event) => this.setState({ companyName: event.target.value }, () => this.handleChange())} 
-                    onLoad={(event) => this.setState({ companyName: event.target.value }, () => this.handleChange())}
+                  <select ref="commodity_select" 
+                    onChange={(event) => this.setState({ companyName: event.target.value })} 
+                    onLoad={(event) => this.setState({ companyName: event.target.value })}
                     defaultValue={this.props.companyName}>
                     <option value="">No Filters</option>
                     {uniqueCompanies.map((company, index) => <option key={index} value={company}>{company}</option>)}
@@ -135,7 +133,11 @@ class CompaniesComponent extends Component {
                 {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
                 <br />
                 <StackedBarChart 
-                  data={this.prepChartData()} 
+                  data={prepVarVsYearChartData(
+                    'clean_revenue_stream',
+                    'value_reported',
+                    this.handleFilter(this.state.companyName,this.state.range)
+                  )} 
                   uniqueCompanies={uniqueCompanies}
                   uniquePaymentStreams={uniquePaymentStreams}
                   uniqueYears={uniqueYears}
@@ -143,6 +145,7 @@ class CompaniesComponent extends Component {
                   size={[500,500]} />
                 {/* {JSON.stringify(companyPayments)} */}
               </div>
+              
             }
           </div>
         </div>

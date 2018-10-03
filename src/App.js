@@ -33,31 +33,31 @@ class App extends Component {
         ))
   }
 
-  handleClearCompanyFilters() {
-    this.setState({
-      mutatedData: {
-        ...this.state.mutatedData,
-        companyPayments: this.state.data.companyPayments
-      }
-    })
-  }
-  handleCompanyFilter(companyName, range) {
-    const
-      min = range[0] || 2004,
-      max = range[1] || 2014;
-    const { companyPayments } = this.state.data;
-    const filteredCompanyPayments = companyPayments
-      .filter(company => company.year >= min) // cut off minimum
-      .filter(company => company.year <= max) // cutt off maximum
-      .filter(company => companyName.length ? company.company_name === companyName : company) // if companyName is selected, filter it else return the array as is
+  // handleClearCompanyFilters() {
+  //   this.setState({
+  //     mutatedData: {
+  //       ...this.state.mutatedData,
+  //       companyPayments: this.state.data.companyPayments
+  //     }
+  //   })
+  // }
+  // handleCompanyFilter(companyName, range) {
+  //   const
+  //     min = range[0] || 2004,
+  //     max = range[1] || 2014;
+  //   const { companyPayments } = this.state.data;
+  //   const filteredCompanyPayments = companyPayments
+  //     .filter(company => company.year >= min) // cut off minimum
+  //     .filter(company => company.year <= max) // cutt off maximum
+  //     .filter(company => companyName.length ? company.company_name === companyName : company) // if companyName is selected, filter it else return the array as is
       
-    this.setState({
-      mutatedData: {
-        ...this.state.mutatedData,
-        companyPayments: [...filteredCompanyPayments]
-      }
-    })
-  }
+  //   this.setState({
+  //     mutatedData: {
+  //       ...this.state.mutatedData,
+  //       companyPayments: [...filteredCompanyPayments]
+  //     }
+  //   })
+  // }
   render() {
     return (
       <div className="App">
@@ -65,8 +65,8 @@ class App extends Component {
         <HeroComponent />
         <BodyComponent
           data={this.state.mutatedData}
-          handleClearCompanyFilters={this.handleClearCompanyFilters.bind(this)}
-          handleCompanyFilter={this.handleCompanyFilter.bind(this)}
+          // handleClearCompanyFilters={this.handleClearCompanyFilters.bind(this)}
+          // handleCompanyFilter={this.handleCompanyFilter.bind(this)}
           reusableNestedColorScale={reusableNestedColorScale}
         />
         <FooterComponent />

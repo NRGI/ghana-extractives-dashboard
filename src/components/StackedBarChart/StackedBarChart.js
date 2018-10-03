@@ -29,47 +29,13 @@ class StackedBarChart extends Component {
   
   createBarChart() {
 
-    const { data, nestedColorScale, uniquePaymentStreams, uniqueYears } = this.props;
-    // nestedColorScale(uniquePaymentStreams);
-    // const node = this.node
-    // const dataMax = max(this.props.data)
-    // const yScale = scaleLinear()
-    //   .domain([0, dataMax])
-    //   .range([0, this.props.size[1]])
-  
-    // select(node)
-    //   .selectAll("rect")
-    //   .data(this.props.data)
-    //   .enter()
-    //   .append("rect")
-  
-    // select(node)
-    //   .selectAll("rect")
-    //   .data(this.props.data)
-    //   .exit()
-    //   .remove()
-  
-    // select(node)
-    //   .selectAll("rect")
-    //   .data(this.props.data)
-    //   .style("fill", "#fe9922")
-    //   .attr("x", (d,i) => i * 25)
-    //   .attr("y", d => this.props.size[1] - yScale(d))
-    //   .attr("height", d => yScale(d))
-    //   .attr("width", 25)
-
-
+  const { data, nestedColorScale, uniquePaymentStreams, uniqueYears } = this.props;
 
   const 
     margin = {top: 20, right: 20, bottom: 70, left: 100},
     height = 500,
     node = select(this.node);
-    // g = node.append('g');
-  
-    // g.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  
-  
   
   const z = nestedColorScale;
   // scaleOrdinal()
@@ -89,7 +55,7 @@ class StackedBarChart extends Component {
   const y = scaleLinear()
     .rangeRound([chartHeight, 0]);
 
-  console.log(data);
+  // console.log(data);
   let keys = [];
 
   data.forEach(element => { 
@@ -115,7 +81,7 @@ class StackedBarChart extends Component {
     })
   })
 
-  console.log(keys);
+  // console.log(keys);
 
 
   // var keys = data.keys;
@@ -174,18 +140,6 @@ class StackedBarChart extends Component {
       .on('mouseout', tooltip.hide);
 
 
-  
-    //   .attr("fill", function(d) { return z(d.key); })
-    // .selectAll("rect")
-    // .data(function(d) { return d; })
-    // .enter().append("rect")
-    //   .attr("x", function(d) { return x(d.data.year); })
-    //   .attr("y", function(d) { return y(d[1]); })
-    //   .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-    //   .attr("width", x.bandwidth())
-
-  // console.log(g);
-
   g.append("g")
       .attr("class", "axis")
       .attr("transform", "translate(0," + chartHeight + ")")
@@ -202,11 +156,6 @@ class StackedBarChart extends Component {
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
       .text("Revenue (GHS)");
-    
-
-  
-
-
   }
   
   render() {
@@ -214,16 +163,6 @@ class StackedBarChart extends Component {
         width={700} height={500}>
     </svg>
   }
-
-  // constructor(props) {
-  //   super(props)
-  // }
-  
-  // render() {
-  //   return (
-  //     <div ></div>
-  //   );
-  // }
 }
 
 StackedBarChart.propTypes = {}

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './NavigationComponent.scss'
 
-const sections = [
+let sections = [
   {
     path: '#',
     name: 'Home'
@@ -28,6 +28,8 @@ const sections = [
     name: 'Company Revenue Comparisons'
   }
 ]
+
+sections = [];
 
 const NavigationComponent = ({ }) => (
   <nav className="NavigationComponent">
