@@ -128,7 +128,7 @@ export const loadAllData = () => {
 
 
   const getNestedCommoditiesCompanies = (data, comp, comd) => {
-    return d3.nest()
+    const nestCommoditiesCompanies = d3.nest()
       .key(d => d.commodity).sortKeys(d3.ascending)
       // .key(function(d) { return d.updated_name; }).sortKeys(d3.ascending)
       .rollup( d => _(d).map(d => d.updated_name)
@@ -138,6 +138,20 @@ export const loadAllData = () => {
         .sort() 
       ) 
       .object(data);
+    return nestCommoditiesCompanies;
+  }
+
+  const reshapeCompanyPaymentsAddCommodities = (companyPayments, nestdCommComp) => {
+    companyPayments.forEach((c,i) => {
+      const commodities = Object.keys(nestdCommComp);
+      commodities.forEach((d) => {
+        nestdCommComp[d].forEach((e) => {
+          // Assuming each company deals only with one commodity
+          if (e === c.company_name) companyPayments[i].commodity = d;
+        })
+      })
+    })
+    return companyPayments;
   }
 
   // const snakeCaseConverter = d => d.replace(' ','_').toLowerCase();
@@ -159,20 +173,19 @@ export const loadAllData = () => {
   
   return Promise.all(promises).then(function(values) {
     const result = {};  
-    result.companyPayments = reshapeCompanyPayments(values[0],values[2]);
+    const tempCompanyPayments = reshapeCompanyPayments(values[0],values[2]);
     result.govtAgencies = reshapeGovtAgencies(values[1]);
     result.commodities = reshapeCommodities(values[2]);
-    result.uniqueYears = getUniqueYears(result.companyPayments);
-    result.uniqueCompanies = getUniqueCompanies(result.companyPayments);
+    result.uniqueYears = getUniqueYears(tempCompanyPayments);
+    result.uniqueCompanies = getUniqueCompanies(tempCompanyPayments);
     result.uniqueCommodities = getUniqueCommodities(result.commodities);
-    result.uniquePaymentStreams = getUniquePaymentStreams([result.companyPayments,result.govtAgencies]);
+    result.uniquePaymentStreams = getUniquePaymentStreams([tempCompanyPayments,result.govtAgencies]);
     result.nestedCommoditiesCompanies = getNestedCommoditiesCompanies(
       result.commodities,
       result.uniqueCompanies,
-      result.uniqueCommodities,
-      result.uniquePaymentStreams,
+      result.uniqueCommodities
     );
-    console.log(result);
+    result.companyPayments = reshapeCompanyPaymentsAddCommodities(tempCompanyPayments,result.nestedCommoditiesCompanies); 
 
     return result;
   });

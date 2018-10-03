@@ -1,130 +1,175 @@
-import React from 'react'
+import React , { Component } from 'react'
 import PropTypes from 'prop-types'
+import Slider, { createSliderWithTooltip } from 'rc-slider'
 import styles from './CommoditiesComponent.scss'
+import ReactSVG from 'react-svg'
+import LoadingBar from 'loading-svg/loading-bars.svg'
+import 'rc-slider/assets/index.css';
+import 'rc-tooltip/assets/bootstrap_white.css';
+import StackedAreaChart from '../StackedAreaChart/StackedAreaChart';
+import { nest } from 'd3-collection';
+import { prepVarVsYearChartData } from '../../DataPrepHelpers';
+import Select from 'react-select';
 
-const CommoditiesComponent = ({ }) => (
-  <div className="CommoditiesComponent">
-    <section className="section">
-      <h3 title="title is-2">Trend analysis of revenue per commodity</h3>
-      <code>D3 will go here</code>
-      <div className="columns">
+const Range = createSliderWithTooltip(Slider.Range);
+
+const formatter = (format) => {
+  switch (format) {
+    default:
+      return value => value
+  }
+}
+
+class CommoditiesComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      range: this.props.range,
+      commodityName: this.props.commodityName
+    }
+  }
+
+  handleClearFilters() {
+    const { commodityName, range } = this.defaultProps;
+
+    this.setState({
+      commodityName: commodityName,
+      range: range
+    })
+  }
+  handleFilter(commodityName, range) {
+
+    const commodityNameArray = Array.isArray(commodityName) ? commodityName : [commodityName];
+
+    console.log(commodityNameArray);
+    const
+      min = range[0] || 2004,
+      max = range[1] || 2014;
+    return this.props.companyPayments
+      .filter(c => c.year >= min) // cut off minimum
+      .filter(c => c.year <= max) // cutt off maximum
+      .filter(c => commodityNameArray.length ? commodityNameArray.includes(c.commodity) : c) // if commodityName is selected, filter it else return the array as is
+  }
+
+  handleChange = () => {
+    const { commodityName, range } = this.state;
+    this.handleFilter(commodityName, range);
+  }
+
+  handleClear = () => {
+    this.handleClearFilters()
+    this.refs.commodity_select.value = this.props.commodityName;
+  }
+
+  handleLog = (msg) => console.log(msg);
+
+  static defaultProps = {
+    range: [2004, 2014],
+    // companyName: 'Ghana Manganese Company Limited'
+    commodityName: []
+  }
+  static propTypes = {
+    uniqueCompanies: PropTypes.arrayOf(PropTypes.string),
+    uniqueYears: PropTypes.arrayOf(PropTypes.number),
+    handleCompanyFilter: PropTypes.func,
+    handleClearCompanyFilters: PropTypes.func,
+    nestedColorScale: PropTypes.func,
+    commodityName: PropTypes.arrayOf(PropTypes.object)
+  }
+
+  render() {
+    const { uniqueCommodities, uniqueYears, 
+      uniquePaymentStreams, reusableNestedColorScale } = this.props;
+    // console.log(this.state);
+    // console.log(this.props);
+    const isLoading = !!(this.props.companyPayments.length) ? false : true;
+
+    console.log("rendering isLoading: " + !!isLoading);
+    return (
+      <div className="CommoditiesComponent">
         <div className="column">
-          <h4 className="title is-4">Notes</h4>
-          <p>Zero values signify data unavailable or no production. Oil figures were originally available in USD, but to allow for comparability, they have been converted to GHS at the Bank of Ghana annual average rate for each year.</p>
-        </div>
-        <div className="column">
-          <h4 className="title is-4">Source</h4>
-          <p>Revenues represent the aggregate of commodities as reported in GHEITI reports: <a href="http://gheiti.gov.gh/">http://gheiti.gov.gh/</a></p>
-        </div>
-        <div className="column">
-          <h4 className="title is-4">Data</h4>
-          <a href="#" className="button"> Disaggregated resource revenues</a>
-        </div>
-      </div>
-    </section>
-    <section className="section">
-      <h3 className="title is-2">Revenue by commodity and fiscal streams</h3>
-      <h4 className="subtitle is-2">Select Year</h4>
-      <input type="range" min="0" max="100" />
-      <p>The next four graphs are filtered for the year chosen above.</p>
-      <h4 className="subtitle is-2">The next four graphs are filtered for the year chosen above.</h4>
-      <code>D3 will go here</code>
-      <div className="columns">
-        <div className="column">
-          <h4 className="title is-4">Notes</h4>
-          <p>Zero values signify data unavailable or no production.</p>
-        </div>
-        <div className="column">
-          <h4 className="title is-4">Source</h4>
-          <p>Revenues represent the aggregate of commodities as reported in GHEITI reports: <a href="http://gheiti.gov.gh/">http://gheiti.gov.gh/</a></p>
-        </div>
-        <div className="column">
-          <h4 className="title is-4">Data</h4>
-          <a href="#" className="button"> Disaggregated resource revenues</a>
-        </div>
-      </div>
-      <div className="columns">
-        <div className="column">
-          <h4 className="title is-4">Mining: revenue streams by company (2013)</h4>
-          <code>D3 will go here</code>
-        </div>
-        <div className="column">
-          <h4 className="title is-4">Oil and gas: revenue streams by project (2013)</h4>
-          <code>D3 will go here</code>
-        </div>
-      </div>
-      <div className="columns">
-        <div className="column">
-          <h4 className="title is-4">Mining: companies (2013)</h4>
-          <code>D3 will go here</code>
-        </div>
-        <div className="column">
-          <h4 className="title is-4">Oil and gas: projects (2013)</h4>
-          <code>D3 will go here</code>
-        </div>
-      </div>
-      <div className="columns">
-        <div className="column">
-          <h4 className="title is-4">Notes</h4>
-          <p>Companies are listed in order of revenue contribution, for the year selected above using the time slider. Zero values signify data unavailable or no production. Oil figures were originally available in USD, but to allow for comparability, they have been converted to GHS at the Bank of Ghana annual average rate for each year.</p>
-        </div>
-        <div className="column">
-          <h4 className="title is-4">Source</h4>
-          <p>GHEITI website: <a href="http://gheiti.gov.gh/">http://gheiti.gov.gh/</a></p>
-        </div>
-        <div className="column">
-          <h4 className="title is-4">Data</h4>
-          <a href="#" className="button"> Disaggregated resource revenues</a>
-        </div>
-      </div>
-    </section>
-    <section className="section">
-      <h3 className="title is-4">Company: Newmont Ghana Gold Ltd</h3>
-      <div className="columns">
-        <div className="column">
-          <label className="">Select a company:</label>
-          <select>
-            <option>Options</option>
-            <option>Go</option>
-            <option>Here</option>
-            <option>Not sure if API</option>
-          </select>
-        </div>
-      </div>
-      <div className="columns">
-        <div className="column is-3">
-          <h4 className="title is-4">About</h4>
-          <p>
-            New Zealand and Mexico. Of the 2013 consolidated gold production, approximately 36% came from North America, 19% from South America, 31% from Australia, 1% from Indonesia, and 13% from Africa essentially Ghana.
-            <br />
-            Ahafo (100% owned) is located in the Brong-Ahafo Region of Ghana, approximately 180 miles (290 kilometers) northwest of Accra. It operates four open pits at Ahafo with reserves contained in 11 pits and an underground mine presently in development. Commercial production in the fourth pit at Amoma, began in October 2010. The process plant consists of a conventional mill and carbon-in-leach circuit. Ahafo produced 570,000 ounces of gold in 2013, and at December 31, 2013, we reported 10.1 million ounces of gold reserves.
-          </p>
-        </div>
-        <div className="column is-9">
-          <h4 className="title is-4">Trend in revenue stream by project</h4>
-          <code>D3 will go here</code>
-          <div className="columns">
-            <div className="column">
-              <h4 className="title is-4">Notes</h4>
-              <p>Companies are listed in order of revenue contribution, for the year selected above using the time slider. Zero values signify data unavailable or no production. Oil figures were originally available in USD, but to allow for comparability, they have been converted to GHS at the Bank of Ghana annual average rate for each year.</p>
-            </div>
-            <div className="column">
-              <h4 className="title is-4">Source</h4>
-              <p>GHEITI website: <a href="http://gheiti.gov.gh/">http://gheiti.gov.gh/</a></p>
-            </div>
-            <div className="column">
-              <h4 className="title is-4">Data</h4>
-              <a href="#" className="button"> Disaggregated resource revenues</a>
-            </div>
+          <p>Commodities Chart</p>
+          <div className="field has-addons">
+            {!!isLoading
+              ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
+              : 
+                <div className="column control">
+                <p>Use slider to select years to display</p>
+                <Range allowCross={false}
+                  defaultValue={[this.props.range[0], this.props.range[1]]}
+                  min={this.props.range[0]}
+                  max={this.props.range[1]}
+                  tipFormatter={formatter()}
+                  onAfterChange={(range) => this.setState({ range })}
+                  tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2 }}
+                  pushable={true}
+                />
+                <br/>
+                <p>Use dropdown box to to select commodities to display</p>
+                <div className="select">
+                  {/* <select ref="commodity_select" 
+                    onChange={
+                      (event) => this.setState({ commodityName: event.target.value === "" ? [] : event.target.value })
+                      // (event) => {
+                      //   let select = event.target.options;
+                      //   let values = [].filter.call(select.options, o => o.selected).map(o => o.value);
+                      //   this.setState({ commodityName: values });
+                      // }
+                    } 
+                    onLoad={
+                      (event) => this.setState({ commodityName: event.target.value === "" ? [] : event.target.value })
+                      // (event) => {
+                      //   let select = event.target.options;
+                      //   let values = [].filter.call(select.options, o => o.selected).map(o => o.value);
+                      //   this.setState({ commodityName: values });
+                      // }
+                    }
+                    defaultValue={this.props.commodityName}>
+                    <option value="">No Filters</option>
+                    {uniqueCommodities.map((commodity, index) => <option key={index} value={commodity}>{commodity}</option>)}
+                  </select> */}
+
+                  <Select
+                    // value={this.state.commodityName}
+                    onChange={(options) => {
+                      this.handleLog(options);
+                      const val = options.map(o => o.value);
+                      // if ( !this.state.commodityName.includes(val) )
+                        this.setState({ commodityName: [...options.map(o => o.value)] });
+                    }}
+                    options={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
+                    closeMenuOnSelect={false}
+                    isMulti={true}
+                    autosize={false}
+                    placeholder={'All values shown when box is cleared...'}
+                    // defaultValue={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
+                  />
+
+                </div>
+                {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
+                <br />
+                <StackedAreaChart 
+                  // data={this.prepChartData()} 
+                  data={prepVarVsYearChartData(
+                    'commodity',
+                    'value_reported',
+                    this.handleFilter(this.state.commodityName,this.state.range)
+                  )} 
+                  uniqueCommodities={uniqueCommodities}
+                  uniquePaymentStreams={uniquePaymentStreams}
+                  uniqueYears={uniqueYears}
+                  nestedColorScale={reusableNestedColorScale(uniqueCommodities)} 
+                  size={[500,500]} />
+                {/* {JSON.stringify(companyPayments)} */}
+              </div>
+              
+            }
           </div>
         </div>
       </div>
-    </section>
-  </div>
-);
+    )
+  }
+}
 
-CommoditiesComponent.propTypes = {}
-
-CommoditiesComponent.defaultProps = {}
 
 export default CommoditiesComponent

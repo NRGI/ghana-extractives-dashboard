@@ -7,8 +7,9 @@ import ProductionComponent from '../ProductionComponent'
 import RevenuesComponent from '../RevenuesComponent'
 import DataComponent from '../DataComponent'
 
-const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter, reusableNestedColorScale }) => {
-  const { uniqueCompanies, uniqueYears, uniquePaymentStreams, companyPayments } = data;
+// const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter, reusableNestedColorScale }) => {
+const BodyComponent = ({ data, reusableNestedColorScale }) => {
+  const { uniqueCompanies, uniqueYears, uniqueCommodities, uniquePaymentStreams, companyPayments } = data;
   return (
     <div className="BodyComponent">
       <div className="container">
@@ -22,18 +23,30 @@ const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter, r
             </div> 
           <div>
           */}
-        {/* <CommoditiesComponent /> */}
+        <CommoditiesComponent 
+          uniqueCommodities={uniqueCommodities}
+          uniqueYears={uniqueYears}
+          uniquePaymentStreams={uniquePaymentStreams}
+          companyPayments={companyPayments}
+          reusableNestedColorScale={reusableNestedColorScale}
+          commodityName={uniqueCommodities}
+          // handleClearCompanyFilters={handleClearCompanyFilters}
+          // handleCompanyFilter={handleCompanyFilter}
+          // isLoading={!!(companyPayments.length 
+          //   && uniquePaymentStreams.length)
+          //    ? false : true}
+        />
         <CompaniesComponent
           uniqueCompanies={uniqueCompanies}
           uniqueYears={uniqueYears}
           uniquePaymentStreams={uniquePaymentStreams}
           companyPayments={companyPayments}
           reusableNestedColorScale={reusableNestedColorScale}
-          handleClearCompanyFilters={handleClearCompanyFilters}
-          handleCompanyFilter={handleCompanyFilter}
-          isLoading={!!(companyPayments.length 
-            && uniquePaymentStreams.length)
-             ? false : true}
+          // handleClearCompanyFilters={handleClearCompanyFilters}
+          // handleCompanyFilter={handleCompanyFilter}
+          // isLoading={!!(companyPayments.length 
+          //   && uniquePaymentStreams.length)
+          //    ? false : true}
         />
         {/* <ProductionComponent /> */}
         {/* <RevenuesComponent /> */}
