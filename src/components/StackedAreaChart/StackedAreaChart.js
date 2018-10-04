@@ -30,15 +30,11 @@ class StackedAreaChart extends Component {
 
   const 
     margin = {top: 20, right: 20, bottom: 70, left: 100},
-    height = 500,
+    height = this.props.size[1],
     node = select(this.node);
 
   
   const z = nestedColorScale;
-  // scaleOrdinal()
-  //     .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-  
-  // const data = this.props.data;
 
   let chartWidth = 50*(uniqueYears.length)
   let width = 50*(uniqueYears.length+2);
@@ -102,10 +98,6 @@ class StackedAreaChart extends Component {
     })
   })
 
-  console.log(keys);
-
-  
-
   // var keys = data.keys;
   
   // // data.sort(function(a, b) { return b.total - a.total; });
@@ -135,7 +127,7 @@ class StackedAreaChart extends Component {
 
       const value = data[_.findIndex(data, ['year', year])][d.key];
       // const [typel1,typel2] = d.type.split(' | ')
-      return "<div style='background-color: rgba(255,255,255,0.7); padding:5px'><strong>Commodity:</strong> " + d.key + "</span>"
+      return "<div style='background-color: rgba(255,255,255,0.7); padding:5px'><strong>" + d.key + "</strong> </span>"
       + "<br/><strong>Year:</strong> " + year
       + "<br/><strong>Revenue (GHA):</strong> " + format(",.0f")(value)
       + '</div>';
@@ -203,7 +195,7 @@ class StackedAreaChart extends Component {
 
   render() {
     return <svg className="StackedAreaChart" ref={node => this.node = node}
-        width={700} height={500}>
+        width={700} height={this.props.size[1]}>
     </svg>
   }
 }

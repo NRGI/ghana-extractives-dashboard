@@ -33,7 +33,7 @@ class StackedBarChart extends Component {
 
   const 
     margin = {top: 20, right: 20, bottom: 70, left: 100},
-    height = 500,
+    height = this.props.size[1],
     node = select(this.node);
 
   
@@ -101,9 +101,10 @@ class StackedBarChart extends Component {
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html((d) => {
-      const [typel1,typel2] = d.type.split(' | ')
-      return "<div style='background-color: rgba(255,255,255,0.7); padding:5px'><strong>Revenue type:</strong> " + typel1 + "</span>"
-      + "<br/><strong>Revenue type detail:</strong> " + typel2
+      let [typel1,typel2] = d.type.split(' | ')
+      typel2 = typel2 ? typel2 : typel1;
+      return "<div style='background-color: rgba(255,255,255,0.7); padding:5px'><strong>" + typel2 + "</strong> </span>"
+      // + "<br/><strong>Revenue type detail:</strong> " + typel2
       + "<br/><strong>Revenue (GHA):</strong> " + format(",.0f")((d[1] - d[0]))
       + '</div>';
     })

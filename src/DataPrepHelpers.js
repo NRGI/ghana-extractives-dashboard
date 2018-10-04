@@ -1,11 +1,11 @@
 import { nest } from 'd3-collection';
 
 export const prepVarVsYearChartData = (filterVar,value,chartData) => {
-  console.log(chartData);
+  // console.log(chartData);
   
   const nestedByYear = nest()
     .key((d) => +d.year).entries(chartData);
-  console.log(nestedByYear);
+  // console.log(nestedByYear);
   const valuesByYear = nestedByYear.map(d => {
     const values = {};
     d.values.forEach(element => {
