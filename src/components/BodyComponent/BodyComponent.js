@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import styles from './BodyComponent.scss'
 import CommoditiesComponent from '../CommoditiesComponent'
 import CompaniesComponent from '../CompaniesComponent'
+import CompaniesByCommodityComponent from '../CompaniesByCommodityComponent/CompaniesByCommodityComponent'
 import ProductionComponent from '../ProductionComponent'
 import RevenuesComponent from '../RevenuesComponent'
 import DataComponent from '../DataComponent'
+import CompanyRevenuesComparisonComponent from '../CompanyRevenuesComparisonComponent/CompanyRevenuesComparisonComponent';
 
 // const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter, reusableNestedColorScale }) => {
 const BodyComponent = ({ data, reusableNestedColorScale }) => {
@@ -29,12 +31,15 @@ const BodyComponent = ({ data, reusableNestedColorScale }) => {
           uniquePaymentStreams={uniquePaymentStreams}
           companyPayments={companyPayments}
           reusableNestedColorScale={reusableNestedColorScale}
-          commodityName={uniqueCommodities}
-          // handleClearCompanyFilters={handleClearCompanyFilters}
-          // handleCompanyFilter={handleCompanyFilter}
-          // isLoading={!!(companyPayments.length 
-          //   && uniquePaymentStreams.length)
-          //    ? false : true}
+          cName={uniqueCommodities}
+        />
+        <CompaniesByCommodityComponent 
+          uniqueCommodities={uniqueCommodities}
+          uniqueYears={uniqueYears}
+          uniqueCompanies={uniqueCompanies}
+          uniquePaymentStreams={uniquePaymentStreams}
+          companyPayments={companyPayments}
+          reusableNestedColorScale={reusableNestedColorScale}
         />
         <CompaniesComponent
           uniqueCompanies={uniqueCompanies}
@@ -42,11 +47,15 @@ const BodyComponent = ({ data, reusableNestedColorScale }) => {
           uniquePaymentStreams={uniquePaymentStreams}
           companyPayments={companyPayments}
           reusableNestedColorScale={reusableNestedColorScale}
-          // handleClearCompanyFilters={handleClearCompanyFilters}
-          // handleCompanyFilter={handleCompanyFilter}
-          // isLoading={!!(companyPayments.length 
-          //   && uniquePaymentStreams.length)
-          //    ? false : true}
+        />
+        <CompanyRevenuesComparisonComponent
+          uniqueCommodities={uniqueCommodities}
+          uniqueCompanies={uniqueCompanies}
+          uniqueYears={uniqueYears}
+          uniquePaymentStreams={uniquePaymentStreams}
+          companyPayments={companyPayments}
+          reusableNestedColorScale={reusableNestedColorScale}
+          cName={uniqueCompanies}
         />
         {/* <ProductionComponent /> */}
         {/* <RevenuesComponent /> */}

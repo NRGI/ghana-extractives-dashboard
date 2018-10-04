@@ -2,14 +2,15 @@ import * as d3 from 'd3';
 import _ from 'lodash';
 import { isNullOrUndefined } from 'util';
 
-const ghanaScale = ['#f09b37','#348673','#febe0c','#b81251','#1d4677','#009B3A']
+const ghanaPalette = ['#f09b37','#348673','#febe0c','#1d4677','#009B3A','#ce1126']
 
-export const reusableNestedColorScale = (domain, delimiter = ' | ') => {
+export const reusableNestedColorScale = (domain, delimiter = ' | ', palette = ghanaPalette) => {
   // const accent = d3.scaleOrdinal(d3.schemeAccent);
 
+  // console.log(domain);
   const levels = {};
   // let baseScheme = d3.schemeDark2;
-  let baseScheme = ghanaScale;
+  let baseScheme = palette;
   domain.forEach(d => {
     const [lOne, lTwo] = d.split(delimiter);
     
@@ -21,8 +22,15 @@ export const reusableNestedColorScale = (domain, delimiter = ' | ') => {
   });
   const level1Vals = Object.keys(levels);
   // const level2Vals = _(levels.map(d => d[1])).uniq().value().sort();
-  
+  if (level1Vals.length>baseScheme.length*1.5)
+    baseScheme = _(baseScheme.map(c => [
+      d3.color(c).darker().hex(),
+      c,
+      d3.color(c).brighter().hex()
+    ])).flatten().value();
 
+
+  // console.log(baseScheme);
   const huePicker = (hue) => d3.interpolateHcl(d3.color(hue), d3.color(hue).brighter().brighter());
 
   return d3.scaleOrdinal()
