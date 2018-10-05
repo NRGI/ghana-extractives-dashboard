@@ -4,14 +4,13 @@ import styles from './BodyComponent.scss'
 import CommoditiesComponent from '../CommoditiesComponent'
 import CompaniesComponent from '../CompaniesComponent'
 import CompaniesByCommodityComponent from '../CompaniesByCommodityComponent/CompaniesByCommodityComponent'
-import ProductionComponent from '../ProductionComponent'
-import RevenuesComponent from '../RevenuesComponent'
-import DataComponent from '../DataComponent'
 import CompanyRevenuesComparisonComponent from '../CompanyRevenuesComparisonComponent/CompanyRevenuesComparisonComponent';
+import RevenueFlowsComponent from '../RevenueFlowsComponent/RevenueFlowsComponent';
 
 // const BodyComponent = ({ data, handleClearCompanyFilters, handleCompanyFilter, reusableNestedColorScale }) => {
 const BodyComponent = ({ data, reusableNestedColorScale }) => {
-  const { uniqueCompanies, uniqueYears, uniqueCommodities, uniquePaymentStreams, companyPayments } = data;
+  const { uniqueCompanies, uniqueYears, uniqueCommodities, uniquePaymentStreams, 
+    companyPayments, govtAgencies } = data;
   return (
     <div className="BodyComponent">
       <div className="container">
@@ -47,6 +46,16 @@ const BodyComponent = ({ data, reusableNestedColorScale }) => {
           uniquePaymentStreams={uniquePaymentStreams}
           companyPayments={companyPayments}
           reusableNestedColorScale={reusableNestedColorScale}
+        />
+        <RevenueFlowsComponent
+          uniqueCommodities={uniqueCommodities}
+          uniqueCompanies={uniqueCompanies}
+          uniqueYears={uniqueYears}
+          uniquePaymentStreams={uniquePaymentStreams}
+          companyPayments={companyPayments}
+          govtAgencies={govtAgencies}
+          reusableNestedColorScale={reusableNestedColorScale}
+          cName={uniqueCommodities}
         />
         <CompanyRevenuesComparisonComponent
           uniqueCommodities={uniqueCommodities}

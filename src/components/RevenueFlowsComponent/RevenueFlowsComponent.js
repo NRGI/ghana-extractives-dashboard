@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styles from './CompaniesComponent.scss'
-import Slider, { createSliderWithTooltip } from 'rc-slider';
+import styles from './RevenueFlowsComponent.scss'
+import Slider, { createSliderWithTooltip } from 'rc-slider'
 import ReactSVG from 'react-svg'
 import LoadingBar from 'loading-svg/loading-bars.svg'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
-import StackedBarChart from '../StackedBarChart/StackedBarChart';
+import StackedAreaChart from '../StackedAreaChart/StackedAreaChart';
 import { nest } from 'd3-collection';
-import { prepVarVsYearChartData } from '../../DataPrepHelpers';
+import { prepSankeyChartData } from '../../DataPrepHelpers';
 import Select from 'react-select';
+import SankeyChart from '../SankeyChart/SankeyChart';
 
-const Range = createSliderWithTooltip(Slider.Range);
+const YearSlider = createSliderWithTooltip(Slider);
 
 const formatter = (format) => {
   switch (format) {
@@ -20,7 +21,7 @@ const formatter = (format) => {
   }
 }
 
-class CompaniesComponent extends Component {
+class RevenueFlowsComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +29,7 @@ class CompaniesComponent extends Component {
       cName: this.props.cName
     }
   }
-
+  
   handleClearFilters() {
     const { cName, range } = this.defaultProps;
 
@@ -37,17 +38,21 @@ class CompaniesComponent extends Component {
       range: range
     })
   }
-  handleFilter(cName, range) {    
-    
-    const cNameArray = Array.isArray(cName) ? cName : [cName];
+  handleFilter(cName, range) {
 
+    const cNameArray = Array.isArray(cName) ? cName : [cName];
+    range = Array.isArray(range) ? range : [range];
+
+    console.log(cNameArray);
     const
-      min = range[0] || 2004,
-      max = range[1] || 2014;
-    return this.props.companyPayments
-      .filter(c => c.year >= min) // cut off minimum
-      .filter(c => c.year <= max) // cutt off maximum
-      .filter(c => cNameArray.length ? cNameArray.includes(c.company_name) : c) // if cName is selected, filter it else return the array as is
+      yearPick = range[0] || 2004;
+    return [
+      this.props.companyPayments
+        .filter(c => c.year === yearPick) 
+        .filter(c => cNameArray.length ? cNameArray.includes(c.company_name) : c),
+      this.props.govtAgencies
+        .filter(c => c.year === yearPick)    
+    ]  
   }
 
   handleChange = () => {
@@ -70,34 +75,21 @@ class CompaniesComponent extends Component {
     uniqueCompanies: PropTypes.arrayOf(PropTypes.string),
     uniqueYears: PropTypes.arrayOf(PropTypes.number),
     nestedColorScale: PropTypes.func,
-    companyPayments: PropTypes.arrayOf(PropTypes.object)
+    cName: PropTypes.arrayOf(PropTypes.string)
   }
 
   render() {
-    const { uniqueCompanies, uniqueYears, 
+    const { uniqueCommodities, uniqueYears, uniqueCompanies,
       uniquePaymentStreams, reusableNestedColorScale } = this.props;
-    const isLoading = !!(this.props.companyPayments.length) ? false : true;
+    const isLoading = !!(this.props.companyPayments.length 
+      && this.props.govtAgencies.length) ? false : true;
 
     console.log("rendering isLoading: " + !!isLoading);
-      
-    const customStyles = (height = 40) => {
-      return {
-        container: (base) => ({
-          ...base,
-          display:'inline-block',
-        }),
-        valueContainer: (base) => ({
-          ...base,
-          minHeight: height,
-        })
-      }
-    }
-
+    
     return (
-      <div className="CompaniesComponent">
+      <div className="CommoditiesComponent">
         <div className="column">
-          
-        <h2>Company Revenues by Revenue Type</h2>
+          <h2>Company and Government Revenue Flows</h2>
           <div className="field has-addons">
             {!!isLoading
               ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
@@ -105,52 +97,58 @@ class CompaniesComponent extends Component {
                 <div className="column control">
                 <p>Use slider to select years to display</p>
                 <br/><br/>
-                <Range allowCross={false}
-                  defaultValue={[this.props.range[0], this.props.range[1]]}
+                <YearSlider
+                  defaultValue={this.props.range[0]}
                   min={this.props.range[0]}
                   max={this.props.range[1]}
                   tipFormatter={formatter()}
-                  onAfterChange={(range) => this.setState({ range })}
+                  onAfterChange={(range) => this.setState({ range }) }
                   tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
                   dots={true}
-                  pushable={true}
                 />
                 <br/>
-                <p>Use dropdown box to to select companies to display</p>
-
+                <p>Use dropdown box to to select commodities to display</p>
                 <div className="select">
+                  
                   <Select
-                    // value={this.state.commodityName}
                     onChange={(options) => {
                       this.handleLog(options);
                       const val = options.map(o => o.value);
-                      // if ( !this.state.commodityName.includes(val) )
-                        this.setState({ cName: [...options.map(o => o.value)] });
+                      this.setState({ cName: [...options.map(o => o.value)] });
                     }}
-                    options={uniqueCompanies.map((c) => ({value: c, label: c}))}
+                    options={uniqueCompanies.map((company) => ({value: company, label: company}))}
                     closeMenuOnSelect={false}
                     isMulti={true}
                     autosize={false}
-                    styles={customStyles}
                     placeholder={'All values shown when box is cleared...'}
                     // defaultValue={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
                   />
+
                 </div>
                 {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
-                <br />
+                <br /><br /><br />
                 <div className='chart'>
-                <StackedBarChart 
+                {/* <StackedAreaChart 
+                  // data={this.prepChartData()} 
                   data={prepVarVsYearChartData(
-                    'clean_revenue_stream',
+                    'commodity',
                     'value_reported',
                     this.handleFilter(this.state.cName,this.state.range)
                   )} 
-                  uniqueCompanies={uniqueCompanies}
+                  uniqueCommodities={uniqueCommodities}
                   uniquePaymentStreams={uniquePaymentStreams}
                   uniqueYears={uniqueYears}
-                  nestedColorScale={reusableNestedColorScale(uniquePaymentStreams)} 
-                  size={[500,500]} />
+                  nestedColorScale={reusableNestedColorScale(uniqueCommodities)} 
+                  size={[500,500]} /> */}
+                {/* </div> */}
+                  {console.log(this.props.companyPayments,this.props.govtAgencies)}
+                  <SankeyChart 
+                    data={prepSankeyChartData(
+                      this.handleFilter(this.state.cName,this.state.range)
+                    )}
+                   size={[900,500]} />
                   </div>
+
                 {/* {JSON.stringify(companyPayments)} */}
               </div>
               
@@ -162,4 +160,4 @@ class CompaniesComponent extends Component {
   }
 }
 
-export default CompaniesComponent
+export default RevenueFlowsComponent
