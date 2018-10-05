@@ -89,13 +89,15 @@ class CompanyRevenuesComparisonComponent extends Component {
             : 
               <div className="column control">
               <p>Use slider to select years to display</p>
+              <br/><br/>
               <Range allowCross={false}
                 defaultValue={[this.props.range[0], this.props.range[1]]}
                 min={this.props.range[0]}
                 max={this.props.range[1]}
                 tipFormatter={formatter()}
                 onAfterChange={(range) => this.setState({ range })}
-                tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2 }}
+                tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
+                dots={true}
                 pushable={true}
               />
               <br/>
