@@ -5,14 +5,16 @@ hr {
 }
 
 .rc-slider{
+  max-width: 640px;
+  margin-bottom: 40px;
   .rc-slider-rail,
   .rc-slider-step{
-    background-color: $color-ghana-green-light;
+    background-color: $color-ghana-orange;
   }
   .rc-slider-dot{
-    border-color: $color-ghana-green-light;
+    border-color: $color-ghana-orange;
   }
   .rc-slider-handle{
-    border-color: $color-ghana-green-light;
+    border-color: $color-ghana-orange;
   }
 }

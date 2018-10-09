@@ -105,7 +105,7 @@ class CompaniesComponent extends Component {
               ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
               : 
                 <div className="column control">
-                <p>Use slider to select years to display</p>
+                <label className="label">Use slider to select years to display</label>
                 <br/><br/>
                 <Range allowCross={false}
                   defaultValue={[this.props.range[0], this.props.range[1]]}
@@ -118,7 +118,7 @@ class CompaniesComponent extends Component {
                   pushable={true}
                 />
                 <br/>
-                <p>Use dropdown box to to select companies to display</p>
+                <label className="label">Use dropdown box to to select companies to display</label>
 
                 <div className="select">
                   <Select
