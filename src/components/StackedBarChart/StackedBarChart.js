@@ -99,11 +99,12 @@ class StackedBarChart extends Component {
 
   let tooltip = tip()
     .attr('class', 'd3-tip')
-    .offset([-10, 0])
+    .offset([0, 20])
+    .direction(d => 'e')
     .html((d) => {
       let [typel1,typel2] = d.type.split(' | ')
       typel2 = typel2 ? typel2 : typel1;
-      return "<div style='background-color: rgba(255,255,255,0.7); padding:5px'><strong>" + typel2 + "</strong> </span>"
+      return "<div style='font-size:12px; background-color: rgba(255,255,255,0.7); padding:5px'><strong>" + typel2 + "</strong> </span>"
       // + "<br/><strong>Revenue type detail:</strong> " + typel2
       + "<br/><strong>Revenue (GHA):</strong> " + format(",.0f")((d[1] - d[0]))
       + '</div>';
@@ -150,9 +151,12 @@ class StackedBarChart extends Component {
       .attr("class", "axis")
       .call(axisLeft(y).ticks(null, "s").tickFormat(format(",.0f")))
     .append("text")
-      .attr("x", 2)
-      .attr("y", y(y.ticks().pop()) + 0.5)
-      .attr("dy", "0.32em")
+      // .attr("x", 2)
+      // .attr("y", y(y.ticks().pop()) + 0.5)
+      .attr("x", -height/2)
+      .attr("y", -100)
+      .attr("transform", "rotate(-90)")
+      .attr("dy", "1em")
       .attr("fill", "#000")
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
@@ -161,7 +165,7 @@ class StackedBarChart extends Component {
   
   render() {
     return <svg className="StackedBarChart" ref={node => this.node = node}
-        width={700} height={500}>
+        width={700} height={this.props.size[1]}>
     </svg>
   }
 }

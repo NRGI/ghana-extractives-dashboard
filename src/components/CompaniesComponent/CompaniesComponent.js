@@ -8,7 +8,7 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
 import StackedBarChart from '../StackedBarChart/StackedBarChart';
 import { nest } from 'd3-collection';
-import { prepVarVsYearChartData } from '../../DataPrepHelpers';
+import { prepVarVsYearChartData, prepVarVsYearChartDataByKey } from '../../DataPrepHelpers';
 import Select from 'react-select';
 import ScrollableAnchor from 'react-scrollable-anchor';
 
@@ -105,20 +105,24 @@ class CompaniesComponent extends Component {
               ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
               : 
                 <div className="column control">
-                <label className="label">Use slider to select years to display</label>
-                <br/><br/>
+                <label className="label">Use slider to select years to display.  <br/>
+                  Current selection: {this.state.range[0]} to {this.state.range[1]}</label>
+                <br/>
                 <Range allowCross={false}
                   defaultValue={[this.props.range[0], this.props.range[1]]}
                   min={this.props.range[0]}
                   max={this.props.range[1]}
                   tipFormatter={formatter()}
                   onAfterChange={(range) => this.setState({ range })}
-                  tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
+                  tipProps={{ placement: 'top', prefixCls: 'rc-tooltip'}}
                   dots={true}
                   pushable={true}
                 />
                 <br/>
-                <label className="label">Use dropdown box to to select companies to display</label>
+                <label className="label">Use dropdown list to to select companies to display</label>
+                <p>(If you select more than one company, the revenue streams will be combined. 
+                When the revenue from selected companies have more than one stream, each 
+                stream will be displayed in individual charts below the main chart)</p>
 
                 <div className="select">
                   <Select
@@ -154,6 +158,28 @@ class CompaniesComponent extends Component {
                   size={[500,500]} />
                   </div>
                 {/* {JSON.stringify(companyPayments)} */}
+                <div className="small-multiples-list">
+                  {(prepVarVsYearChartDataByKey('clean_revenue_stream','value_reported',
+                      this.handleFilter(this.state.cName, this.state.range)).length > 1 
+                    && this.state.cName.length > 0)
+                  ?
+                    prepVarVsYearChartDataByKey('clean_revenue_stream','value_reported',
+                      this.handleFilter(this.state.cName, this.state.range))
+                      .map((item, index) => (
+                    <div className="small-multiples-item">
+                      <p>{item.key}</p>
+                      <StackedBarChart
+                        // data={this.prepChartData()} 
+                        data={item.value}
+                        uniquePaymentStreams={uniquePaymentStreams}
+                        uniqueYears={uniqueYears}
+                        nestedColorScale={reusableNestedColorScale(uniquePaymentStreams)}
+                        size={[500, 200]} />
+                    </div>
+                    ))
+                  : ''
+                    }
+                </div>
               </div>
               
             }

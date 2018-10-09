@@ -89,22 +89,23 @@ class CompanyRevenuesComparisonComponent extends Component {
                 ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
                 :
                 <div className="column control">
-                  <label className="label">Use slider to select years to display</label>
-                  <br /><br />
+                  <label className="label">Use slider to select years to display. <br/>
+                  Current selection: {this.state.range[0]} to {this.state.range[1]}</label>
+                  <br />
                   <Range allowCross={false}
                     defaultValue={[this.props.range[0], this.props.range[1]]}
                     min={this.props.range[0]}
                     max={this.props.range[1]}
                     tipFormatter={formatter()}
                     onAfterChange={(range) => this.setState({ range })}
-                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
+                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip' }}
                     dots={true}
                     pushable={true}
                   />
                   <br />
-                  <label className="label">Use dropdown box to to select companies to display</label>
-                  <p>(When you select companies, each company's revenues will be shown in individual
-                charts below the main chart)</p>
+                  <label className="label">Use dropdown list to to select companies to display</label>
+                  <p>(When selecting more that one company, each company's revenue split will be 
+                    displayed in individual charts below the main chart)</p>
                   <div className="select">
 
                     <Select
@@ -141,7 +142,9 @@ class CompanyRevenuesComparisonComponent extends Component {
 
 
                     <div className="small-multiples-list">
-                      {this.state.cName.map((item, index) => (
+                      {this.state.cName.length > 1 
+                      ?
+                        this.state.cName.map((item, index) => (
                         <div className="small-multiples-item">
                           <p>{item}</p>
                           <StackedAreaChart
@@ -157,7 +160,9 @@ class CompanyRevenuesComparisonComponent extends Component {
                             nestedColorScale={reusableNestedColorScale(uniqueCompanies)}
                             size={[500, 200]} />
                         </div>
-                      ))}
+                        ))
+                      : ''
+                      }
                     </div>
 
                   </div>
