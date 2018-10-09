@@ -1,4 +1,4 @@
-import React , { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './CommoditiesComponent.scss'
 import Slider, { createSliderWithTooltip } from 'rc-slider'
@@ -10,6 +10,7 @@ import StackedAreaChart from '../StackedAreaChart/StackedAreaChart';
 import { nest } from 'd3-collection';
 import { prepVarVsYearChartData } from '../../DataPrepHelpers';
 import Select from 'react-select';
+import ScrollableAnchor from 'react-scrollable-anchor';
 
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -75,74 +76,76 @@ class CommoditiesComponent extends Component {
   }
 
   render() {
-    const { uniqueCommodities, uniqueYears, 
+    const { uniqueCommodities, uniqueYears,
       uniquePaymentStreams, reusableNestedColorScale } = this.props;
     const isLoading = !!(this.props.companyPayments.length) ? false : true;
 
     console.log("rendering isLoading: " + !!isLoading);
     return (
-      <div className="CommoditiesComponent">
-        <div className="column">
-          <h2>Total Revenues by Commodity</h2>
-          <div className="field has-addons">
-            {!!isLoading
-              ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
-              : 
+      <ScrollableAnchor id="total-revenues-by-commodity">
+        <div className="CommoditiesComponent">
+          <div className="column">
+            <h2 className="title is-3">Total Revenues by Commodity</h2>
+            <div className="field has-addons">
+              {!!isLoading
+                ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
+                :
                 <div className="column control">
-                <p>Use slider to select years to display</p>
-                <br/><br/>
-                <Range allowCross={false}
-                  defaultValue={[this.props.range[0], this.props.range[1]]}
-                  min={this.props.range[0]}
-                  max={this.props.range[1]}
-                  tipFormatter={formatter()}
-                  onAfterChange={(range) => this.setState({ range })}
-                  tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
-                  dots={true}
-                  pushable={true}
-                />
-                <br/>
-                <p>Use dropdown box to to select commodities to display</p>
-                <div className="select">
-                  
-                  <Select
-                    onChange={(options) => {
-                      this.handleLog(options);
-                      const val = options.map(o => o.value);
-                      this.setState({ cName: [...options.map(o => o.value)] });
-                    }}
-                    options={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
-                    closeMenuOnSelect={false}
-                    isMulti={true}
-                    autosize={false}
-                    placeholder={'All values shown when box is cleared...'}
-                    // defaultValue={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
+                  <label className="label">Use slider to select years to display</label>
+                  <br /><br />
+                  <Range allowCross={false}
+                    defaultValue={[this.props.range[0], this.props.range[1]]}
+                    min={this.props.range[0]}
+                    max={this.props.range[1]}
+                    tipFormatter={formatter()}
+                    onAfterChange={(range) => this.setState({ range })}
+                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
+                    dots={true}
+                    pushable={true}
                   />
+                  <br />
+                  <label className="label">Use dropdown box to to select commodities to display</label>
+                  <div className="select">
 
-                </div>
-                {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
-                <br />
-                <div className='chart'>
-                <StackedAreaChart 
-                  // data={this.prepChartData()} 
-                  data={prepVarVsYearChartData(
-                    'commodity',
-                    'value_reported',
-                    this.handleFilter(this.state.cName,this.state.range)
-                  )} 
-                  uniqueCommodities={uniqueCommodities}
-                  uniquePaymentStreams={uniquePaymentStreams}
-                  uniqueYears={uniqueYears}
-                  nestedColorScale={reusableNestedColorScale(uniqueCommodities)} 
-                  size={[500,500]} />
+                    <Select
+                      onChange={(options) => {
+                        this.handleLog(options);
+                        const val = options.map(o => o.value);
+                        this.setState({ cName: [...options.map(o => o.value)] });
+                      }}
+                      options={uniqueCommodities.map((commodity) => ({ value: commodity, label: commodity }))}
+                      closeMenuOnSelect={false}
+                      isMulti={true}
+                      autosize={false}
+                      placeholder={'All values shown when box is cleared...'}
+                    // defaultValue={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
+                    />
+
                   </div>
-                {/* {JSON.stringify(companyPayments)} */}
-              </div>
-              
-            }
+                  {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
+                  <br />
+                  <div className='chart'>
+                    <StackedAreaChart
+                      // data={this.prepChartData()} 
+                      data={prepVarVsYearChartData(
+                        'commodity',
+                        'value_reported',
+                        this.handleFilter(this.state.cName, this.state.range)
+                      )}
+                      uniqueCommodities={uniqueCommodities}
+                      uniquePaymentStreams={uniquePaymentStreams}
+                      uniqueYears={uniqueYears}
+                      nestedColorScale={reusableNestedColorScale(uniqueCommodities)}
+                      size={[500, 500]} />
+                  </div>
+                  {/* {JSON.stringify(companyPayments)} */}
+                </div>
+
+              }
+            </div>
           </div>
         </div>
-      </div>
+      </ScrollableAnchor>
     )
   }
 }

@@ -10,6 +10,7 @@ import StackedBarChart from '../StackedBarChart/StackedBarChart';
 import { nest } from 'd3-collection';
 import { prepVarVsYearChartData } from '../../DataPrepHelpers';
 import Select from 'react-select';
+import ScrollableAnchor from 'react-scrollable-anchor';
 
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -94,16 +95,17 @@ class CompaniesComponent extends Component {
     }
 
     return (
+      <ScrollableAnchor id="company-revenues-by-revenue-type">
       <div className="CompaniesComponent">
         <div className="column">
           
-        <h2>Company Revenues by Revenue Type</h2>
+        <h2 className="title is-3">Company Revenues by Revenue Type</h2>
           <div className="field has-addons">
             {!!isLoading
               ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
               : 
                 <div className="column control">
-                <p>Use slider to select years to display</p>
+                <label className="label">Use slider to select years to display</label>
                 <br/><br/>
                 <Range allowCross={false}
                   defaultValue={[this.props.range[0], this.props.range[1]]}
@@ -116,7 +118,7 @@ class CompaniesComponent extends Component {
                   pushable={true}
                 />
                 <br/>
-                <p>Use dropdown box to to select companies to display</p>
+                <label className="label">Use dropdown box to to select companies to display</label>
 
                 <div className="select">
                   <Select
@@ -158,6 +160,7 @@ class CompaniesComponent extends Component {
           </div>
         </div>
       </div>
+      </ScrollableAnchor>
     )
   }
 }

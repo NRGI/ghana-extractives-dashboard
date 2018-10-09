@@ -32,6 +32,7 @@ const BodyComponent = ({ data, reusableNestedColorScale }) => {
           reusableNestedColorScale={reusableNestedColorScale}
           cName={uniqueCommodities}
         />
+        <hr />
         <CompaniesByCommodityComponent 
           uniqueCommodities={uniqueCommodities}
           uniqueYears={uniqueYears}
@@ -40,6 +41,7 @@ const BodyComponent = ({ data, reusableNestedColorScale }) => {
           companyPayments={companyPayments}
           reusableNestedColorScale={reusableNestedColorScale}
         />
+        <hr />
         <CompaniesComponent
           uniqueCompanies={uniqueCompanies}
           uniqueYears={uniqueYears}
@@ -47,6 +49,7 @@ const BodyComponent = ({ data, reusableNestedColorScale }) => {
           companyPayments={companyPayments}
           reusableNestedColorScale={reusableNestedColorScale}
         />
+        <hr />
         <RevenueFlowsComponent
           uniqueCommodities={uniqueCommodities}
           uniqueCompanies={uniqueCompanies}
@@ -57,6 +60,7 @@ const BodyComponent = ({ data, reusableNestedColorScale }) => {
           reusableNestedColorScale={reusableNestedColorScale}
           cName={uniqueCommodities}
         />
+        <hr />
         <CompanyRevenuesComparisonComponent
           uniqueCommodities={uniqueCommodities}
           uniqueCompanies={uniqueCompanies}
@@ -66,6 +70,7 @@ const BodyComponent = ({ data, reusableNestedColorScale }) => {
           reusableNestedColorScale={reusableNestedColorScale}
           cName={uniqueCompanies}
         />
+        <hr />
         {/* <ProductionComponent /> */}
         {/* <RevenuesComponent /> */}
         {/* <DataComponent /> */}

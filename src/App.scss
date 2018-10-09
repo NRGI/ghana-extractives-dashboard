@@ -1,0 +1,20 @@
+@import './variables.scss';
+hr {
+  background-color: $color-ghana-green-light;
+  margin-bottom: 40px;
+}
+
+.rc-slider{
+  max-width: 640px;
+  margin-bottom: 40px;
+  .rc-slider-rail,
+  .rc-slider-step{
+    background-color: $color-ghana-orange;
+  }
+  .rc-slider-dot{
+    border-color: $color-ghana-orange;
+  }
+  .rc-slider-handle{
+    border-color: $color-ghana-orange;
+  }
+}

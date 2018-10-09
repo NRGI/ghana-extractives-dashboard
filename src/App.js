@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import 'bulma/css/bulma.css';
-import './App.css';
-import axios from 'axios';
+import './App.scss';
 import NavigationComponent from './components/NavigationComponent';
 import HeroComponent from './components/HeroComponent';
 import BodyComponent from './components/BodyComponent';

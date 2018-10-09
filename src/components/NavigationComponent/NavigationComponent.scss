@@ -1,1 +1,10 @@
-.NavigationComponent{}
+@import '../../variables.scss';
+
+.NavigationComponent {
+  a.navbar-item {
+    padding: 15px 20px;
+    max-width: 210px;
+    display: flex;
+    font-size: .8rem;
+  }
+}
