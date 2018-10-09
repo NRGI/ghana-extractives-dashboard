@@ -7,8 +7,9 @@ const FooterComponent = ({ }) => (
     <div className="column">
       <p>The Ghana Extractive Industries Transparency Initiative (GHEITI)<br />
         Ministry of Finance, GHEITI Secretariat, P. O. Box MB 40, Accra, GR, Ghana<br />
-        <a href="tel:+233-24-4689819">+233-24-4689819</a><br />
-        fashiadey@mofep.gov.gh</p>
+         
+        <a href="tel:+233-244-203-479">+233-244-203-479</a><br />
+        BAbdul-Razak@mofep.gov.gh</p>
     </div>
     <div className="column">
       <p>&copy; Natural Resource Governance Institute 2015</p>

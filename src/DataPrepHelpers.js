@@ -3,6 +3,39 @@ import _ from 'lodash';
 
 const delimiter = ' | ';
 
+export const prepVarVsYearChartDataByKey = (filterVar,value,chartData,filter) => {
+  const xyData = prepVarVsYearChartData(filterVar,value,chartData)
+  // console.log(xyData);
+  let keys = [];
+  let returnData = {}; 
+
+  if (!!xyData.length) {
+    keys = xyData.map(entry => Object.entries(entry)
+        .filter(d => !(['year','total'].includes(d[0])))
+        .map(d => d[0])
+      );
+    
+    keys = _(keys).flatten().uniq().value().sort();
+
+    xyData.forEach(d => {
+      // console.log(d);
+      keys.forEach(k => {
+        // console.log(k);
+        if (returnData[k])
+          returnData[k].push({'year':d.year, [k]: d[k]});
+        else
+          returnData[k] = [{'year':d.year, [k]: d[k]}];
+      })
+    })
+  }
+
+  // console.log(keys);
+  // console.log(returnData);
+
+  // return _(returnData).forEach((k,v) => ({'key': k, 'value': v}));
+  return Object.entries(returnData).map(([key, value]) => ({key,value}));
+}
+
 export const prepVarVsYearChartData = (filterVar,value,chartData) => {
   // console.log(chartData);
   
@@ -26,8 +59,8 @@ export const prepVarVsYearChartData = (filterVar,value,chartData) => {
 
 export const prepSankeyChartData = (data) => {
   const [fromData,toData] = data;
-  console.log(fromData);
-  console.log(toData);
+  // console.log(fromData);
+  // console.log(toData);
 
   let links = fromData.map(d => ({
     sourceName: d.company_name,
@@ -36,21 +69,21 @@ export const prepSankeyChartData = (data) => {
   }));
 
 
-  links = links.concat(
+  links = fromData.length ? links.concat(
     toData.map(d => ({
       sourceName: d.clean_revenue_stream.split(delimiter)[1],
       targetName: d.government_agency_name,
       value: d.value_reported 
     }))
     .filter(d => d.value > 0)
-  )
+  ) : links
 
   let uniqueNodes = links.map(d => d.sourceName)
     .concat(links.map(d => d.targetName))
 
   uniqueNodes =  _(uniqueNodes).uniq().value().sort();
 
-  console.log(uniqueNodes);
+  // console.log(uniqueNodes);
 
   const nodes = uniqueNodes.map((d,i) => {
     links.forEach(l => {
@@ -62,8 +95,8 @@ export const prepSankeyChartData = (data) => {
       name: d
     }
   })
-  console.log(nodes);
-  console.log(links);
+  // console.log(nodes);
+  // console.log(links);
 
   return {nodes: nodes, links: links}
 }

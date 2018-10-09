@@ -30,8 +30,19 @@ class CommoditiesComponent extends Component {
     }
   }
 
+  static defaultProps = {
+    range: [2004, 2014],
+    cName: []
+  }
+  static propTypes = {
+    uniqueCompanies: PropTypes.arrayOf(PropTypes.string),
+    uniqueYears: PropTypes.arrayOf(PropTypes.number),
+    nestedColorScale: PropTypes.func,
+    cName: PropTypes.arrayOf(PropTypes.string)
+  }
+
   handleClearFilters() {
-    const { cName, range } = this.defaultProps;
+    const { cName, range } = this.props;
 
     this.setState({
       cName: cName,
@@ -58,22 +69,12 @@ class CommoditiesComponent extends Component {
   }
 
   handleClear = () => {
-    this.handleClearFilters()
-    this.refs.c_select.value = this.props.cName;
+    this.handleClearFilters();
   }
 
   handleLog = (msg) => console.log(msg);
 
-  static defaultProps = {
-    range: [2004, 2014],
-    cName: []
-  }
-  static propTypes = {
-    uniqueCompanies: PropTypes.arrayOf(PropTypes.string),
-    uniqueYears: PropTypes.arrayOf(PropTypes.number),
-    nestedColorScale: PropTypes.func,
-    cName: PropTypes.arrayOf(PropTypes.string)
-  }
+  
 
   render() {
     const { uniqueCommodities, uniqueYears,
@@ -91,23 +92,29 @@ class CommoditiesComponent extends Component {
                 ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
                 :
                 <div className="column control">
-                  <label className="label">Use slider to select years to display</label>
-                  <br /><br />
+                  <label className="label">Use slider to select years to display. <br/>
+                  Current selection: {this.state.range[0]} to {this.state.range[1]}</label>
+                  <br />
                   <Range allowCross={false}
+                    ref='year_slider'
                     defaultValue={[this.props.range[0], this.props.range[1]]}
                     min={this.props.range[0]}
                     max={this.props.range[1]}
                     tipFormatter={formatter()}
                     onAfterChange={(range) => this.setState({ range })}
-                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
+                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip' }}
                     dots={true}
                     pushable={true}
                   />
                   <br />
-                  <label className="label">Use dropdown box to to select commodities to display</label>
+                  <br />
+                  <label className="label">Use dropdown list to select commodities to display</label>
+                  <p>(If you select more than one commodity, each commodtiy's revenue streams
+                   will be displayed in individual charts below the main chart)</p>
                   <div className="select">
 
                     <Select
+                      ref='c_select'
                       onChange={(options) => {
                         this.handleLog(options);
                         const val = options.map(o => o.value);
@@ -139,6 +146,29 @@ class CommoditiesComponent extends Component {
                       size={[500, 500]} />
                   </div>
                   {/* {JSON.stringify(companyPayments)} */}
+                  <div className="small-multiples-list">
+                      {this.state.cName.length > 1 
+                      ?
+                        this.state.cName.map((item, index) => (
+                        <div className="small-multiples-item">
+                          <p>{item}</p>
+                          <StackedAreaChart
+                            // data={this.prepChartData()} 
+                            data={prepVarVsYearChartData(
+                              'commodity',
+                              'value_reported',
+                              this.handleFilter(item, this.state.range)
+                            )}
+                            uniqueCommodities={uniqueCommodities}
+                            uniquePaymentStreams={uniquePaymentStreams}
+                            uniqueYears={uniqueYears}
+                            nestedColorScale={reusableNestedColorScale(uniqueCommodities)}
+                            size={[500, 200]} />
+                        </div>
+                        ))
+                      : ''
+                      }
+                    </div>
                 </div>
 
               }

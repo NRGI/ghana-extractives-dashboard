@@ -5,16 +5,23 @@ hr {
 }
 
 .rc-slider{
-  max-width: 640px;
-  margin-bottom: 40px;
+  max-width: 580px;
+  margin-bottom: 20px;
+  margin-left: 20px;
   .rc-slider-rail,
   .rc-slider-step{
-    background-color: $color-ghana-orange;
+    // background-color: $color-ghana-orange;
   }
   .rc-slider-dot{
-    border-color: $color-ghana-orange;
+    // border-color: $color-ghana-orange;
   }
   .rc-slider-handle{
-    border-color: $color-ghana-orange;
+    // border-color: $color-ghana-orange;
   }
+}
+
+.select {
+  min-width: 640px;
+  max-width: 640px;
+  margin-bottom: 40px;
 }

@@ -96,19 +96,26 @@ class RevenueFlowsComponent extends Component {
                 ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
                 :
                 <div className="column control">
-                  <p>Use slider to select years to display</p>
-                  <br /><br />
+                  <label className="label">Use slider to select year to display.  <br/>
+                  Current selection: {!!this.state.range[0] ? this.state.range[0] :this.state.range}</label>
+                  <br />
+                  <p>(When you select a year, the chart will show the revenue flows from all the companies 
+                  into various government departments in that year)</p>
                   <YearSlider
                     defaultValue={this.props.range[0]}
                     min={this.props.range[0]}
                     max={this.props.range[1]}
                     tipFormatter={formatter()}
                     onAfterChange={(range) => this.setState({ range })}
-                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
+                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip' }}
                     dots={true}
                   />
                   <br />
-                  <p>Use dropdown box to to select commodities to display</p>
+                  <label className="label">Use dropdown list to to select companies to display</label>
+                  <p>(When you select companies from the list, the flows on the right side of the chart 
+                  will filter to show only the revenue flows from those companies, while the flows on the left
+                  will still show all the flows of payments going into various government departments in the 
+                  selected year. If the selected companies made no payments in that year, nothing will be shown)</p>
                   <div className="select">
 
                     <Select
