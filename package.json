@@ -47,6 +47,7 @@
     "react": "^16.4.2",
     "react-dev-utils": "^5.0.1",
     "react-dom": "^16.4.2",
+    "react-scrollable-anchor": "^0.6.1",
     "react-select": "^2.0.0",
     "react-svg": "^6.0.8",
     "resolve": "1.6.0",
