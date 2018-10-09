@@ -1,0 +1,18 @@
+@import './variables.scss';
+hr {
+  background-color: $color-ghana-green-light;
+  margin-bottom: 40px;
+}
+
+.rc-slider{
+  .rc-slider-rail,
+  .rc-slider-step{
+    background-color: $color-ghana-green-light;
+  }
+  .rc-slider-dot{
+    border-color: $color-ghana-green-light;
+  }
+  .rc-slider-handle{
+    border-color: $color-ghana-green-light;
+  }
+}

@@ -10,6 +10,7 @@ import StackedBarChart from '../StackedBarChart/StackedBarChart';
 import { nest } from 'd3-collection';
 import { prepVarVsYearChartData } from '../../DataPrepHelpers';
 import Select from 'react-select';
+import ScrollableAnchor from 'react-scrollable-anchor';
 
 const Range = createSliderWithTooltip(Slider.Range);
 
@@ -22,11 +23,11 @@ const formatter = (format) => {
 
 class CompaniesByCommodityComponent extends Component {
   constructor(props) {
-      super(props)
-      this.state = {
-        range: this.props.range,
-        cName: this.props.cName
-      }
+    super(props)
+    this.state = {
+      range: this.props.range,
+      cName: this.props.cName
+    }
   }
 
   handleClearFilters() {
@@ -37,8 +38,8 @@ class CompaniesByCommodityComponent extends Component {
       range: range
     })
   }
-  handleFilter(cName, range) {    
-    
+  handleFilter(cName, range) {
+
     const cNameArray = Array.isArray(cName) ? cName : [cName];
 
     const
@@ -72,92 +73,94 @@ class CompaniesByCommodityComponent extends Component {
     nestedColorScale: PropTypes.func,
     companyPayments: PropTypes.arrayOf(PropTypes.object)
   }
-    
-    render() {
-      const { uniqueCompanies, uniqueYears, uniqueCommodities,
-        uniquePaymentStreams, reusableNestedColorScale } = this.props;
-      const isLoading = !!(this.props.companyPayments.length) ? false : true;
-  
-      console.log("rendering isLoading: " + !!isLoading);
-        
-      const customStyles = (height = 40) => {
-        return {
-          container: (base) => ({
-            ...base,
-            display:'inline-block',
-          }),
-          valueContainer: (base) => ({
-            ...base,
-            minHeight: height,
-          })
-        }
+
+  render() {
+    const { uniqueCompanies, uniqueYears, uniqueCommodities,
+      uniquePaymentStreams, reusableNestedColorScale } = this.props;
+    const isLoading = !!(this.props.companyPayments.length) ? false : true;
+
+    console.log("rendering isLoading: " + !!isLoading);
+
+    const customStyles = (height = 40) => {
+      return {
+        container: (base) => ({
+          ...base,
+          display: 'inline-block',
+        }),
+        valueContainer: (base) => ({
+          ...base,
+          minHeight: height,
+        })
       }
-        return (
-            <div className="CompaniesByCommodityComponent">
-            <div className="column">
-              <h2>Company Revenues by Commodity</h2>
-              <div className="field has-addons">
-                {!!isLoading
-                  ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
-                  : 
-                    <div className="column control">
-                    <p>Use slider to select years to display</p>
-                    <br/><br/>
-                    <Range allowCross={false}
-                      defaultValue={[this.props.range[0], this.props.range[1]]}
-                      min={this.props.range[0]}
-                      max={this.props.range[1]}
-                      tipFormatter={formatter()}
-                      onAfterChange={(range) => this.setState({ range })}
-                      tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
-                      dots={true}
-                      pushable={true}
+    }
+    return (
+      <ScrollableAnchor id="company-revenues-by-commodity">
+        <div className="CompaniesByCommodityComponent">
+          <div className="column">
+            <h2 className="title is-3">Company Revenues by Commodity</h2>
+            <div className="field has-addons">
+              {!!isLoading
+                ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
+                :
+                <div className="column control">
+                  <p>Use slider to select years to display</p>
+                  <br /><br />
+                  <Range allowCross={false}
+                    defaultValue={[this.props.range[0], this.props.range[1]]}
+                    min={this.props.range[0]}
+                    max={this.props.range[1]}
+                    tipFormatter={formatter()}
+                    onAfterChange={(range) => this.setState({ range })}
+                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
+                    dots={true}
+                    pushable={true}
+                  />
+                  <br />
+                  <p>Use dropdown box to to select commodities to display</p>
+
+                  <div className="select">
+                    <Select
+                      // value={this.state.commodityName}
+                      onChange={(options) => {
+                        this.handleLog(options);
+                        const val = options.map(o => o.value);
+                        // if ( !this.state.commodityName.includes(val) )
+                        this.setState({ cName: [...options.map(o => o.value)] });
+                      }}
+                      options={uniqueCommodities.map((c) => ({ value: c, label: c }))}
+                      closeMenuOnSelect={false}
+                      isMulti={true}
+                      autosize={false}
+                      styles={customStyles}
+                      placeholder={'All values shown when box is cleared...'}
+                    // defaultValue={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
                     />
-                    <br/>
-                    <p>Use dropdown box to to select commodities to display</p>
-    
-                    <div className="select">
-                      <Select
-                        // value={this.state.commodityName}
-                        onChange={(options) => {
-                          this.handleLog(options);
-                          const val = options.map(o => o.value);
-                          // if ( !this.state.commodityName.includes(val) )
-                            this.setState({ cName: [...options.map(o => o.value)] });
-                        }}
-                        options={uniqueCommodities.map((c) => ({value: c, label: c}))}
-                        closeMenuOnSelect={false}
-                        isMulti={true}
-                        autosize={false}
-                        styles={customStyles}
-                        placeholder={'All values shown when box is cleared...'}
-                        // defaultValue={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
-                      />
-                    </div>
-                    {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
-                    <br />
-                    <div className='chart'>
-                    <StackedBarChart 
+                  </div>
+                  {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
+                  <br />
+                  <div className='chart'>
+                    <StackedBarChart
                       data={prepVarVsYearChartData(
                         'company_name',
                         'value_reported',
-                        this.handleFilter(this.state.cName,this.state.range)
-                      )} 
+                        this.handleFilter(this.state.cName, this.state.range)
+                      )}
                       uniqueCompanies={uniqueCompanies}
                       uniquePaymentStreams={uniquePaymentStreams}
                       uniqueYears={uniqueYears}
-                      nestedColorScale={reusableNestedColorScale(uniqueCompanies)} 
-                      size={[500,500]} />
-                      </div>
-                    {/* {JSON.stringify(companyPayments)} */}
+                      nestedColorScale={reusableNestedColorScale(uniqueCompanies)}
+                      size={[500, 500]} />
                   </div>
-                  
-                }
-              </div>
+                  {/* {JSON.stringify(companyPayments)} */}
+                </div>
+
+              }
             </div>
           </div>
-        );
-    }
+        </div>
+      </ScrollableAnchor>
+    );
+  }
 }
 
 export default CompaniesByCommodityComponent

@@ -11,7 +11,7 @@ import { nest } from 'd3-collection';
 import { prepSankeyChartData } from '../../DataPrepHelpers';
 import Select from 'react-select';
 import SankeyChart from '../SankeyChart/SankeyChart';
-
+import ScrollableAnchor from 'react-scrollable-anchor';
 const YearSlider = createSliderWithTooltip(Slider);
 
 const formatter = (format) => {
@@ -29,7 +29,7 @@ class RevenueFlowsComponent extends Component {
       cName: this.props.cName
     }
   }
-  
+
   handleClearFilters() {
     const { cName, range } = this.defaultProps;
 
@@ -48,11 +48,11 @@ class RevenueFlowsComponent extends Component {
       yearPick = range[0] || 2004;
     return [
       this.props.companyPayments
-        .filter(c => c.year === yearPick) 
+        .filter(c => c.year === yearPick)
         .filter(c => cNameArray.length ? cNameArray.includes(c.company_name) : c),
       this.props.govtAgencies
-        .filter(c => c.year === yearPick)    
-    ]  
+        .filter(c => c.year === yearPick)
+    ]
   }
 
   handleChange = () => {
@@ -81,54 +81,55 @@ class RevenueFlowsComponent extends Component {
   render() {
     const { uniqueCommodities, uniqueYears, uniqueCompanies,
       uniquePaymentStreams, reusableNestedColorScale } = this.props;
-    const isLoading = !!(this.props.companyPayments.length 
+    const isLoading = !!(this.props.companyPayments.length
       && this.props.govtAgencies.length) ? false : true;
 
     console.log("rendering isLoading: " + !!isLoading);
-    
-    return (
-      <div className="CommoditiesComponent">
-        <div className="column">
-          <h2>Company and Government Revenue Flows</h2>
-          <div className="field has-addons">
-            {!!isLoading
-              ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
-              : 
-                <div className="column control">
-                <p>Use slider to select years to display</p>
-                <br/><br/>
-                <YearSlider
-                  defaultValue={this.props.range[0]}
-                  min={this.props.range[0]}
-                  max={this.props.range[1]}
-                  tipFormatter={formatter()}
-                  onAfterChange={(range) => this.setState({ range }) }
-                  tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
-                  dots={true}
-                />
-                <br/>
-                <p>Use dropdown box to to select commodities to display</p>
-                <div className="select">
-                  
-                  <Select
-                    onChange={(options) => {
-                      this.handleLog(options);
-                      const val = options.map(o => o.value);
-                      this.setState({ cName: [...options.map(o => o.value)] });
-                    }}
-                    options={uniqueCompanies.map((company) => ({value: company, label: company}))}
-                    closeMenuOnSelect={false}
-                    isMulti={true}
-                    autosize={false}
-                    placeholder={'All values shown when box is cleared...'}
-                    // defaultValue={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
-                  />
 
-                </div>
-                {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
-                <br /><br /><br />
-                <div className='chart'>
-                {/* <StackedAreaChart 
+    return (
+      <ScrollableAnchor id="company-and-government-revenue-flows">
+        <div className="CommoditiesComponent">
+          <div className="column">
+            <h2 className="title is-3">Company and Government Revenue Flows</h2>
+            <div className="field has-addons">
+              {!!isLoading
+                ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
+                :
+                <div className="column control">
+                  <p>Use slider to select years to display</p>
+                  <br /><br />
+                  <YearSlider
+                    defaultValue={this.props.range[0]}
+                    min={this.props.range[0]}
+                    max={this.props.range[1]}
+                    tipFormatter={formatter()}
+                    onAfterChange={(range) => this.setState({ range })}
+                    tipProps={{ placement: 'top', prefixCls: 'rc-tooltip', mouseLeaveDelay: 2, visible: true }}
+                    dots={true}
+                  />
+                  <br />
+                  <p>Use dropdown box to to select commodities to display</p>
+                  <div className="select">
+
+                    <Select
+                      onChange={(options) => {
+                        this.handleLog(options);
+                        const val = options.map(o => o.value);
+                        this.setState({ cName: [...options.map(o => o.value)] });
+                      }}
+                      options={uniqueCompanies.map((company) => ({ value: company, label: company }))}
+                      closeMenuOnSelect={false}
+                      isMulti={true}
+                      autosize={false}
+                      placeholder={'All values shown when box is cleared...'}
+                    // defaultValue={uniqueCommodities.map((commodity) => ({value: commodity, label: commodity}))}
+                    />
+
+                  </div>
+                  {/* <button className="button" onClick={() => this.handleClear()}>Clear</button> */}
+                  <br /><br /><br />
+                  <div className='chart'>
+                    {/* <StackedAreaChart 
                   // data={this.prepChartData()} 
                   data={prepVarVsYearChartData(
                     'commodity',
@@ -140,22 +141,23 @@ class RevenueFlowsComponent extends Component {
                   uniqueYears={uniqueYears}
                   nestedColorScale={reusableNestedColorScale(uniqueCommodities)} 
                   size={[500,500]} /> */}
-                {/* </div> */}
-                  {console.log(this.props.companyPayments,this.props.govtAgencies)}
-                  <SankeyChart 
-                    data={prepSankeyChartData(
-                      this.handleFilter(this.state.cName,this.state.range)
-                    )}
-                   size={[900,500]} />
+                    {/* </div> */}
+                    {console.log(this.props.companyPayments, this.props.govtAgencies)}
+                    <SankeyChart
+                      data={prepSankeyChartData(
+                        this.handleFilter(this.state.cName, this.state.range)
+                      )}
+                      size={[900, 500]} />
                   </div>
 
-                {/* {JSON.stringify(companyPayments)} */}
-              </div>
-              
-            }
+                  {/* {JSON.stringify(companyPayments)} */}
+                </div>
+
+              }
+            </div>
           </div>
         </div>
-      </div>
+      </ScrollableAnchor>
     )
   }
 }
