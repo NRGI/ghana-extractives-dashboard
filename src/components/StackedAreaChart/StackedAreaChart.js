@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './StackedAreaChart.scss'
+import { CSVLink, CSVDownload } from "react-csv";
 import { scaleLinear, scaleBand, scaleOrdinal, scaleQuantize } from 'd3-scale'
 import { stack, area, curveMonotoneX } from 'd3-shape'
 import { max } from 'd3-array'
@@ -125,12 +126,20 @@ class StackedAreaChart extends Component {
     .html((d) => {
       const context = node.selectAll("g")['_groups'];
       const year = scaleBandInvert(x)(mouse(context[0][0])[0]+25);
+      let value = ''
+      
 
-      const value = data[_.findIndex(data, ['year', year])][d.key];
+      try {
+        value = data[_.findIndex(data, ['year', year])][d.key];
+      }
+      catch(err) {
+        console.log('error while trying to get value for stacked area tooltip ' + err);
+      } 
+
       // const [typel1,typel2] = d.type.split(' | ')
       return "<div style='font-size:12px; background-color: rgba(255,255,255,0.7); padding:5px'><strong>" + d.key + "</strong> </span>"
       + "<br/><strong>Year:</strong> " + year
-      + "<br/><strong>Revenue (GHA):</strong> " + format(",.0f")(value)
+      + "<br/><strong>Revenue ("+this.props.currencyValue+"):</strong> " + format(",.0f")(value)
       + '</div>';
     })
 
@@ -191,14 +200,22 @@ class StackedAreaChart extends Component {
       .attr("fill", "#000")
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
-      .text("Revenue (GHS)");
+      .text("Revenue ("+this.props.currencyValue+")");
   }
   
 
   render() {
-    return <svg className="StackedAreaChart" ref={node => this.node = node}
+    return <div>
+      <svg className="StackedAreaChart" ref={node => this.node = node}
         width={700} height={this.props.size[1]}>
-    </svg>
+      </svg>
+      <br/>
+      <CSVLink 
+        data={this.props.data}
+        filename={"ghana-eiti.csv"}>Download above chart's data as CSV</CSVLink>
+      <br/>
+      <br/>
+    </div>
   }
 }
 

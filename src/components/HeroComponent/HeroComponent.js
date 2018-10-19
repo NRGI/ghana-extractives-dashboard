@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './HeroComponent.scss'
+import logo from '../../gheiti_logo.png'
 
 const HeroComponent = ({ }) => (
   <section className="HeroComponent hero">
     <div className="hero-body">
       <div className="container">
-        <img id="hero-image" src="//www.gheiti.gov.gh/site/templates/pjo_enoica/images/logo.png"/>
+        {/* <img id="hero-image" src="//www.gheiti.gov.gh/site/templates/pjo_enoica/images/logo.png"/> */}
+        <img id="hero-image" src={logo}/>
         <h1 className="title is-1 has-text-centered">Data Analysis of Ghana’s Extractive Sector</h1>
         {/* <button onClick={() => console.log('go down')}>Scroll Down to Begin</button> */}
         <p align='left'>GHEITI’s open data objective seeks to provide unrestricted access and re-use 

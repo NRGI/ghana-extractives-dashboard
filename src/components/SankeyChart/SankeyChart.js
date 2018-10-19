@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styles from './SankeyChart.scss'
+import { CSVLink, CSVDownload } from "react-csv";
 import { stack, area, curveMonotoneX } from 'd3-shape'
 import { max } from 'd3-array'
-import { select, mouse, event } from 'd3-selection'
+import { select, selectAll, mouse, event } from 'd3-selection'
 import { axisBottom, axisLeft } from 'd3-axis'
 import { format } from 'd3-format'
 import { default as tip } from 'd3-tip'
@@ -78,8 +79,8 @@ class SankeyChart extends Component {
           if (d.name) {
             let outputs = d.sourceLinks ? d.sourceLinks.reduce((total, e) => total + e.value,0) : 0;
             let inputs = d.targetLinks ? d.targetLinks.reduce((total, e) => total + e.value,0) : 0;
-            outputs = outputs ? "<br/><strong>Outputs (GHA):</strong> " + format(",.0f")(outputs) : "";
-            inputs = inputs ? "<br/><strong>Inputs (GHA):</strong> " + format(",.0f")(inputs) : "";
+            outputs = outputs ? "<br/><strong>Outputs ("+this.props.currencyValue+"):</strong> " + format(",.0f")(outputs) : "";
+            inputs = inputs ? "<br/><strong>Inputs ("+this.props.currencyValue+"):</strong> " + format(",.0f")(inputs) : "";
             return "<div style='font-size:12px; background-color: rgba(255,255,255,0.7); padding:5px'><strong>" + d.name + "</strong> </span>"
             + inputs
             + outputs
@@ -88,13 +89,18 @@ class SankeyChart extends Component {
           else
             return "<div style='font-size:12px; background-color: rgba(255,255,255,0.7); padding:5px'><strong>" + d.sourceName + "</strong> to </span>"
             + "<br/><strong>" + d.targetName + "</strong> "
-            + "<br/><strong>Revenue (GHA):</strong> " + format(",.0f")(d.value)
+            + "<br/><strong>Revenue ("+this.props.currencyValue+"):</strong> " + format(",.0f")(d.value)
             + '</div>';
         })
 
     node.call(tooltip);
 
-    const color = '#348673';
+    const nodeColor = '#348673';
+    const linkColor = '#555555';
+    // const highlight = '#ef4753';
+    // const highlight = 'rgb(255, 22, 51)';
+    // const highlight = '#810C14';
+    const highlight = 'red';
 
 
     const mappedData = {
@@ -124,9 +130,15 @@ class SankeyChart extends Component {
         .attr("y", d => d.y0)
         .attr("height", d => d.y1 - d.y0)
         .attr("width", d => d.x1 - d.x0)
-        .attr("fill", color)
-      .on('mouseover', tooltip.show)
-      .on('mouseout', tooltip.hide);
+        .attr("fill", nodeColor)
+      .on('mouseover', function(d) { 
+        select(this).attr("fill", highlight);
+        tooltip.show(d,this); 
+      })
+      .on('mouseout', function(d) { 
+        select(this).attr("fill", nodeColor);
+        tooltip.hide(d,this); 
+      });
       // .append("title")
         // .text(d => d.name);
 
@@ -141,13 +153,19 @@ class SankeyChart extends Component {
 
     link.append("path")
         .attr("d", sankeyLinkHorizontal())
-        .attr("stroke", color)
-        .attr("stroke-opacity", 0.5)
+        .attr("stroke", linkColor)
+        .attr("stroke-opacity", 0.2)
         .attr("stroke-width", d => Math.max(1, d.width));
 
-    link
-      .on('mouseover', tooltip.show)
-      .on('mouseout', tooltip.hide);
+    link 
+      .on('mouseover', function(d) { 
+        select(this).selectAll('path').attr("stroke", highlight);
+        tooltip.show(d,this); 
+      })
+      .on('mouseout', function(d) { 
+        select(this).selectAll('path').attr("stroke", linkColor);
+        tooltip.hide(d,this); 
+      });
       // .append("title")
         // .text(d => `${d.source.name} → ${d.target.name}`);
 
@@ -170,10 +188,17 @@ class SankeyChart extends Component {
   }
 
   render() {
-    return (
+    return ( <div>
       <svg className="SankeyChart" ref={node => this.node = node}
         width={this.props.size[0]} height={this.props.size[1]}>
       </svg>
+      <br/>
+      <CSVLink 
+        data={this.props.data.links.map(d => _.pick(d, ['sourceName','targetName','value']))}
+        filename={"ghana-eiti.csv"}>Download above chart's data as CSV</CSVLink>
+      <br/>
+      <br/>
+      </div>
     );
   }
 }

@@ -8,7 +8,7 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
 import StackedAreaChart from '../StackedAreaChart/StackedAreaChart';
 import { nest } from 'd3-collection';
-import { prepVarVsYearChartData } from '../../DataPrepHelpers';
+import { prepVarVsYearChartData, getCurrencyValue } from '../../DataPrepHelpers';
 import Select from 'react-select';
 import ScrollableAnchor from 'react-scrollable-anchor';
 
@@ -77,7 +77,7 @@ class CommoditiesComponent extends Component {
   
 
   render() {
-    const { uniqueCommodities, uniqueYears,
+    const { uniqueCommodities, uniqueYears, currencyValue,
       uniquePaymentStreams, reusableNestedColorScale } = this.props;
     const isLoading = !!(this.props.companyPayments.length) ? false : true;
 
@@ -109,8 +109,7 @@ class CommoditiesComponent extends Component {
                   <br />
                   <br />
                   <label className="label">Use dropdown list to select commodities to display</label>
-                  <p>(If you select more than one commodity, each commodtiy's revenue streams
-                   will be displayed in individual charts below the main chart)</p>
+                  <p>(If you select more than one commodity the revenue streams will be displayed in individual charts below the main chart)</p>
                   <div className="select">
 
                     <Select
@@ -136,13 +135,14 @@ class CommoditiesComponent extends Component {
                       // data={this.prepChartData()} 
                       data={prepVarVsYearChartData(
                         'commodity',
-                        'value_reported',
+                        currencyValue,
                         this.handleFilter(this.state.cName, this.state.range)
                       )}
                       uniqueCommodities={uniqueCommodities}
                       uniquePaymentStreams={uniquePaymentStreams}
                       uniqueYears={uniqueYears}
                       nestedColorScale={reusableNestedColorScale(uniqueCommodities)}
+                      currencyValue={currencyValue}
                       size={[500, 500]} />
                   </div>
                   {/* {JSON.stringify(companyPayments)} */}
@@ -156,13 +156,14 @@ class CommoditiesComponent extends Component {
                             // data={this.prepChartData()} 
                             data={prepVarVsYearChartData(
                               'commodity',
-                              'value_reported',
+                              currencyValue,
                               this.handleFilter(item, this.state.range)
                             )}
                             uniqueCommodities={uniqueCommodities}
                             uniquePaymentStreams={uniquePaymentStreams}
                             uniqueYears={uniqueYears}
                             nestedColorScale={reusableNestedColorScale(uniqueCommodities)}
+                            currencyValue={currencyValue}
                             size={[500, 200]} />
                         </div>
                         ))
