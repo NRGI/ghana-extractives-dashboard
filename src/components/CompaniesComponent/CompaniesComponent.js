@@ -8,7 +8,7 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
 import StackedBarChart from '../StackedBarChart/StackedBarChart';
 import { nest } from 'd3-collection';
-import { prepVarVsYearChartData, prepVarVsYearChartDataByKey } from '../../DataPrepHelpers';
+import { prepVarVsYearChartData, prepVarVsYearChartDataByKey, getCurrencyValue } from '../../DataPrepHelpers';
 import Select from 'react-select';
 import ScrollableAnchor from 'react-scrollable-anchor';
 
@@ -75,7 +75,7 @@ class CompaniesComponent extends Component {
   }
 
   render() {
-    const { uniqueCompanies, uniqueYears, 
+    const { uniqueCompanies, uniqueYears, currencyValue,
       uniquePaymentStreams, reusableNestedColorScale } = this.props;
     const isLoading = !!(this.props.companyPayments.length) ? false : true;
 
@@ -148,22 +148,23 @@ class CompaniesComponent extends Component {
                 <StackedBarChart 
                   data={prepVarVsYearChartData(
                     'clean_revenue_stream',
-                    'value_reported',
+                    currencyValue,
                     this.handleFilter(this.state.cName,this.state.range)
                   )} 
                   uniqueCompanies={uniqueCompanies}
                   uniquePaymentStreams={uniquePaymentStreams}
                   uniqueYears={uniqueYears}
                   nestedColorScale={reusableNestedColorScale(uniquePaymentStreams)} 
+                  currencyValue={currencyValue}
                   size={[500,500]} />
                   </div>
                 {/* {JSON.stringify(companyPayments)} */}
                 <div className="small-multiples-list">
-                  {(prepVarVsYearChartDataByKey('clean_revenue_stream','value_reported',
+                  {(prepVarVsYearChartDataByKey('clean_revenue_stream',currencyValue,
                       this.handleFilter(this.state.cName, this.state.range)).length > 1 
                     && this.state.cName.length > 0)
                   ?
-                    prepVarVsYearChartDataByKey('clean_revenue_stream','value_reported',
+                    prepVarVsYearChartDataByKey('clean_revenue_stream',currencyValue,
                       this.handleFilter(this.state.cName, this.state.range))
                       .map((item, index) => (
                     <div className="small-multiples-item">
@@ -174,6 +175,7 @@ class CompaniesComponent extends Component {
                         uniquePaymentStreams={uniquePaymentStreams}
                         uniqueYears={uniqueYears}
                         nestedColorScale={reusableNestedColorScale(uniquePaymentStreams)}
+                        currencyValue={currencyValue}
                         size={[500, 200]} />
                     </div>
                     ))

@@ -9,11 +9,12 @@ const FooterComponent = ({ }) => (
         Ministry of Finance, GHEITI Secretariat, P. O. Box MB 40, Accra, GR, Ghana<br />
          
         <a href="tel:+233-244-203-479">+233-244-203-479</a><br />
-        BAbdul-Razak@mofep.gov.gh</p>
+        Babdul-Razak@mofep.gov.gh</p>
     </div>
     <div className="column">
-      <p>&copy; Natural Resource Governance Institute 2015</p>
-      <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Openly licensed under the Creative Commons Attribution-ShareAlike License</a>
+      <p>&copy; Natural Resource Governance Institute 2018</p>
+      <p>Openly licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike License</a></p>
+      <p><label className='label'>Disclaimer: </label>The accuracy and/or completeness of data provided is not guaranteed. Users should always check against original sources before making decisions based upon the data presented</p>
     </div>
   </div>
 );

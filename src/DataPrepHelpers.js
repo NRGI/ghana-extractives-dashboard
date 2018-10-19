@@ -4,6 +4,8 @@ import _ from 'lodash';
 const delimiter = ' | ';
 
 export const prepVarVsYearChartDataByKey = (filterVar,value,chartData,filter) => {
+
+  value = getCurrencyValue(value);
   const xyData = prepVarVsYearChartData(filterVar,value,chartData)
   // console.log(xyData);
   let keys = [];
@@ -38,6 +40,8 @@ export const prepVarVsYearChartDataByKey = (filterVar,value,chartData,filter) =>
 
 export const prepVarVsYearChartData = (filterVar,value,chartData) => {
   // console.log(chartData);
+
+  value = getCurrencyValue(value);
   
   const nestedByYear = nest()
     .key((d) => +d.year).entries(chartData);
@@ -57,15 +61,17 @@ export const prepVarVsYearChartData = (filterVar,value,chartData) => {
   return valuesByYear;
 }
 
-export const prepSankeyChartData = (data) => {
+export const prepSankeyChartData = (data,value) => {
   const [fromData,toData] = data;
   // console.log(fromData);
   // console.log(toData);
 
+  value = getCurrencyValue(value);
+
   let links = fromData.map(d => ({
     sourceName: d.company_name,
     targetName: d.clean_revenue_stream.split(delimiter)[1],
-    value: d.value_reported 
+    value: d[value] 
   }));
 
 
@@ -73,7 +79,7 @@ export const prepSankeyChartData = (data) => {
     toData.map(d => ({
       sourceName: d.clean_revenue_stream.split(delimiter)[1],
       targetName: d.government_agency_name,
-      value: d.value_reported 
+      value: d[value] 
     }))
     .filter(d => d.value > 0)
   ) : links
@@ -99,4 +105,8 @@ export const prepSankeyChartData = (data) => {
   // console.log(links);
 
   return {nodes: nodes, links: links}
+}
+
+export const getCurrencyValue = (currency) => {
+  return currency === 'GHS' ? 'value_reported' : 'value_reported_as_USD';
 }

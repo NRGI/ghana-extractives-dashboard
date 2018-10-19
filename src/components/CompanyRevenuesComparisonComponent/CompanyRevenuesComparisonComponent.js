@@ -8,7 +8,7 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
 import StackedAreaChart from '../StackedAreaChart/StackedAreaChart';
 import { nest } from 'd3-collection';
-import { prepVarVsYearChartData } from '../../DataPrepHelpers';
+import { prepVarVsYearChartData, getCurrencyValue } from '../../DataPrepHelpers';
 import Select from 'react-select';
 import ScrollableAnchor from 'react-scrollable-anchor';
 const Range = createSliderWithTooltip(Slider.Range);
@@ -74,7 +74,7 @@ class CompanyRevenuesComparisonComponent extends Component {
     cName: PropTypes.arrayOf(PropTypes.string)
   }
   render() {
-    const { uniqueCommodities, uniqueYears, uniqueCompanies,
+    const { uniqueCommodities, uniqueYears, uniqueCompanies, currencyValue,
       uniquePaymentStreams, reusableNestedColorScale } = this.props;
     const isLoading = !!(this.props.companyPayments.length) ? false : true;
 
@@ -131,13 +131,14 @@ class CompanyRevenuesComparisonComponent extends Component {
                       // data={this.prepChartData()} 
                       data={prepVarVsYearChartData(
                         'company_name',
-                        'value_reported',
+                        currencyValue,
                         this.handleFilter(this.state.cName, this.state.range)
                       )}
                       uniqueCommodities={uniqueCommodities}
                       uniquePaymentStreams={uniquePaymentStreams}
                       uniqueYears={uniqueYears}
                       nestedColorScale={reusableNestedColorScale(uniqueCompanies)}
+                      currencyValue={currencyValue}
                       size={[500, 500]} />
 
 
@@ -151,13 +152,14 @@ class CompanyRevenuesComparisonComponent extends Component {
                             // data={this.prepChartData()} 
                             data={prepVarVsYearChartData(
                               'company_name',
-                              'value_reported',
+                              currencyValue,
                               this.handleFilter(item, this.state.range)
                             )}
                             uniqueCommodities={uniqueCommodities}
                             uniquePaymentStreams={uniquePaymentStreams}
                             uniqueYears={uniqueYears}
                             nestedColorScale={reusableNestedColorScale(uniqueCompanies)}
+                            currencyValue={currencyValue}
                             size={[500, 200]} />
                         </div>
                         ))

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './NavigationComponent.scss'
 import ScrollableAnchor from 'react-scrollable-anchor/lib/ScrollableAnchor';
+import logo from '../../gheiti_logo.png'
 
 const sections = [
   {
@@ -32,7 +33,7 @@ const NavigationComponent = ({ }) => (
       <div className="container">
         <div className="navbar-brand">
           <a className="navbar-item" href="#home">
-            <img src="//www.gheiti.gov.gh/site/templates/pjo_enoica/images/logo.png" />
+            <img src={logo} />
           </a>
           {/* <a role="button" className="navbar-burger burger">
           <span></span>

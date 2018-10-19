@@ -1,7 +1,7 @@
 {
   "name": "ghana-extractives-dashboard",
   "version": "0.1.0",
-  "homepage": "http://yanoak.github.io/ghana-extractives-dashboard",
+  "homepage": "http://nrgi.github.io/ghana-extractives-dashboard",
   "private": true,
   "dependencies": {
     "ajv-keywords": "^3.2.0",
@@ -45,11 +45,13 @@
     "rc-slider": "^8.6.2",
     "rc-tooltip": "^3.7.2",
     "react": "^16.4.2",
+    "react-csv": "^1.0.17",
     "react-dev-utils": "^5.0.1",
     "react-dom": "^16.4.2",
     "react-scrollable-anchor": "^0.6.1",
     "react-select": "^2.0.0",
     "react-svg": "^6.0.8",
+    "react-toggle": "^4.0.2",
     "resolve": "1.6.0",
     "sheetsy": "^2.1.3",
     "style-loader": "0.19.0",

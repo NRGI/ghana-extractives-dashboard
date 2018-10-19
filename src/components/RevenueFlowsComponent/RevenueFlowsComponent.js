@@ -8,7 +8,7 @@ import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
 import StackedAreaChart from '../StackedAreaChart/StackedAreaChart';
 import { nest } from 'd3-collection';
-import { prepSankeyChartData } from '../../DataPrepHelpers';
+import { prepSankeyChartData, getCurrencyValue } from '../../DataPrepHelpers';
 import Select from 'react-select';
 import SankeyChart from '../SankeyChart/SankeyChart';
 import ScrollableAnchor from 'react-scrollable-anchor';
@@ -79,7 +79,7 @@ class RevenueFlowsComponent extends Component {
   }
 
   render() {
-    const { uniqueCommodities, uniqueYears, uniqueCompanies,
+    const { uniqueCommodities, uniqueYears, uniqueCompanies, currencyValue,
       uniquePaymentStreams, reusableNestedColorScale } = this.props;
     const isLoading = !!(this.props.companyPayments.length
       && this.props.govtAgencies.length) ? false : true;
@@ -140,7 +140,7 @@ class RevenueFlowsComponent extends Component {
                   // data={this.prepChartData()} 
                   data={prepVarVsYearChartData(
                     'commodity',
-                    'value_reported',
+                    currencyValue,
                     this.handleFilter(this.state.cName,this.state.range)
                   )} 
                   uniqueCommodities={uniqueCommodities}
@@ -152,9 +152,11 @@ class RevenueFlowsComponent extends Component {
                     {console.log(this.props.companyPayments, this.props.govtAgencies)}
                     <SankeyChart
                       data={prepSankeyChartData(
-                        this.handleFilter(this.state.cName, this.state.range)
+                        this.handleFilter(this.state.cName, this.state.range),
+                        currencyValue
                       )}
-                      size={[900, 500]} />
+                      size={[900, 500]}
+                      currencyValue={currencyValue} />
                   </div>
 
                   {/* {JSON.stringify(companyPayments)} */}
