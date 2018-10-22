@@ -25,7 +25,7 @@ fi
 
 # Id of the Shippable project containing the deploy script.
 DEPLOY_PROJECT_ID=5804f143e8fe021000f9aed1
-BUILT_PROJECT_NAME=rgi-ui
+BUILT_PROJECT_NAME=ghana-extractive-dashboard
 
 # Trigger Shippable to run the deploy project and pass the current project name, branch, and latest commit hash, committer, commit message
 STATUS=$(curl -s\
