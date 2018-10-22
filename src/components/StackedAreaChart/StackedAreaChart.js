@@ -9,6 +9,8 @@ import { select, mouse } from 'd3-selection'
 import { axisBottom, axisLeft } from 'd3-axis'
 import { format } from 'd3-format'
 import { default as tip } from 'd3-tip'
+import { makeLegend } from '../../DataPrepHelpers'
+
 import _ from 'lodash';
 
 class StackedAreaChart extends Component {
@@ -30,7 +32,7 @@ class StackedAreaChart extends Component {
   const { data, nestedColorScale, uniquePaymentStreams, uniqueYears } = this.props;
 
   const 
-    margin = {top: 20, right: 20, bottom: 70, left: 100},
+    margin = {top: 20, right: 25, bottom: 70, left: 100},
     height = this.props.size[1],
     node = select(this.node);
 
@@ -58,17 +60,6 @@ class StackedAreaChart extends Component {
   }
 
   
-
-  // const xInvert = scaleBandInvert(x);
-//   x.invert = (function(){
-//     var domain = x.domain()
-//     var range = x.range()
-//     var scale = scaleQuantize().domain(range).range(domain)
-
-//     return function(x){
-//         return scale(x)
-//     }
-// })()
 
   const y = scaleLinear()
     .rangeRound([chartHeight, 0]);
@@ -166,22 +157,6 @@ class StackedAreaChart extends Component {
       .on('mousemove', tooltip.show)
       .on('mouseout', tooltip.hide);
 
-    // .selectAll("rect")
-    // .data(d => {
-    //   const returnData = d.map((element) => {
-    //     element.type = d.key;
-    //     return element;
-    //   })
-    //   return returnData; 
-    // })
-    // .enter().append("rect")
-    //   .attr("x", function(d) { return x(d.data.year); })
-    //   .attr("y", function(d,key) { return y(d[1]); })
-    //   .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-    //   .attr("width", x.bandwidth())
-    //   // .append("title").text((d) => {return "revenue type: " + d.type;})
-    //   .on('mouseover', tooltip.show)
-    //   .on('mouseout', tooltip.hide);
 
 
   g.append("g")
@@ -201,13 +176,18 @@ class StackedAreaChart extends Component {
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
       .text("Revenue ("+this.props.currencyValue+")");
-  }
+
+
+    makeLegend(keys,node,width,margin,nestedColorScale);
+  
+  } // End of createAreaChart
+
   
 
   render() {
     return <div>
       <svg className="StackedAreaChart" ref={node => this.node = node}
-        width={700} height={this.props.size[1]}>
+        width={1000} height={this.props.size[1]}>
       </svg>
       <br/>
       <CSVLink 
@@ -217,7 +197,9 @@ class StackedAreaChart extends Component {
       <br/>
     </div>
   }
-}
+
+
+} // End of component
 
 StackedAreaChart.propTypes = {}
 

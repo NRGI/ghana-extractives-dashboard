@@ -1,5 +1,6 @@
 import { nest } from 'd3-collection';
 import _ from 'lodash';
+import { legendColor } from 'd3-svg-legend'
 
 const delimiter = ' | ';
 
@@ -109,4 +110,20 @@ export const prepSankeyChartData = (data,value) => {
 
 export const getCurrencyValue = (currency) => {
   return currency === 'GHS' ? 'value_reported' : 'value_reported_as_USD';
+}
+
+
+export const makeLegend = (keys,node,width,margin,scale) => {
+  if (keys.length > 1) {
+    node.append("g")
+      .attr("class", "legendOrdinal")
+      .attr("transform", "translate("+(width+margin.right)+",20)");
+
+    const legendOrdinal = legendColor()
+      .scale(scale)
+      .labelWrap(300);
+
+    node.select(".legendOrdinal")
+      .call(legendOrdinal);
+  }
 }
