@@ -1,0 +1,10 @@
+{
+  "apps": [{
+    "name": "ghana-extractive",
+    "script": "scripts/start.js",
+    "cwd": "/src",
+    "error_file": "/var/log/pm2/error.log",
+    "out_file": "/var/log/pm2/access.log",
+    "exec_mode": "fork_mode"
+  }]
+}
