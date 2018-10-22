@@ -18,17 +18,17 @@ build:
     - ./create_version.sh
 
     # Pull latest image to be used as cache
-    - docker pull nrgi/nrgi/ghana-extractive-dashboard:$BRANCH || echo 'Cache not available'
+    - docker pull nrgi/ghana-extractive-dashboard:$BRANCH || echo 'Cache not available'
 
     # Use the `--cache-from` option to use the latest image in the repo as a cache for this build. Available since Docker 1.13
     # This should speed up the build time.
-    - docker build -t nrgi/nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT --cache-from nrgi/nrgi/ghana-extractive-dashboard:$BRANCH .
+    - docker build -t nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT --cache-from nrgi/ghana-extractive-dashboard:$BRANCH .
 
     # Create the `latest` tag and force it in case the tag is already there from a previous build
-    - docker tag nrgi/nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT nrgi/nrgi/ghana-extractive-dashboard:$BRANCH
+    - docker tag nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT nrgi/ghana-extractive-dashboard:$BRANCH
 
-    - docker push nrgi/nrgi/ghana-extractive-dashboard:$BRANCH
-    - docker push nrgi/nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT
+    - docker push nrgi/ghana-extractive-dashboard:$BRANCH
+    - docker push nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT
 
     # Trigger deploy through building a repo with deploy configuration
     - ./shippable-deploy.sh
