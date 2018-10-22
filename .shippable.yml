@@ -1,0 +1,50 @@
+language: node_js
+
+node_js:
+  - 8.12.0
+
+branches:
+  only:
+    - staging
+    - master
+
+env:
+  global:
+    # Shippable API token used to trigger deploy
+    - secure: IoVEiqy9gAle+nWvcdt/NskeDiUrrRMgTAluUnywf/1LK17S2B5OoFixknD+94MGUXIAuBWpRa75i/Lc0Jjyt6sfoj8hvl41XMMD1048naSOf/ZP3vlYDMrePBn31M7TlYZHD6jKcM/aMXvkHgKPT+PBNcZIAy8op7dR6YxtnMwkmsX9326ncm6RRpMM6hx4k5lLD3KrjSExHoV7PTrY4XwevT3JjV0VJPMJn6EzqvpF4aUjEomwHHYvN9mHeBM/YKV47oxSFwjK31ST/ReXPIS+NDTWcIgZXRvThlXClSn6P7o1bIIzB864xbiEtZvS2rttjToX2Vi65jkDUyibdg==
+build:
+  ci:
+    # Create the version file
+    - ./create_version.sh
+
+    # Pull latest image to be used as cache
+    - docker pull nrgi/ghana-extractive-dashboard:$BRANCH || echo 'Cache not available'
+
+    # Use the `--cache-from` option to use the latest image in the repo as a cache for this build. Available since Docker 1.13
+    # This should speed up the build time.
+    - docker build -t nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT --cache-from nrgi/ghana-extractive-dashboard:$BRANCH .
+
+    # Create the `latest` tag and force it in case the tag is already there from a previous build
+    - docker tag nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT nrgi/ghana-extractive-dashboard:$BRANCH
+
+    - docker push nrgi/ghana-extractive-dashboard:$BRANCH
+    - docker push nrgi/ghana-extractive-dashboard:$BRANCH.$COMMIT
+
+    # Trigger deploy through building a repo with deploy configuration
+    - ./shippable-deploy.sh
+integrations:
+  hub:
+    - integrationName: nrgiDockerHub
+      type: docker
+  notifications:
+    - integrationName: email
+      type: email
+      recipients:
+        - nrgi@vitaminsoftware.com
+        - yannaungoak@gmail.com
+      branches:
+        only:
+          - master
+          - staging
+      on_success: change
+      on_failure: always
