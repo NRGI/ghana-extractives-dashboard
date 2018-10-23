@@ -1,14 +1,14 @@
 files:
   - path: /var/log/supervisor/supervisord.log
-    tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE.log
+    tag: ghana-dashboard-$DEPLOYMENT_TYPE.log
   - path: /var/log/supervisor/remote-syslog.log
-    tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE-supervisor-remote-syslog.log
+    tag: ghana-dashboard-$DEPLOYMENT_TYPE-supervisor-remote-syslog.log
   - path: /var/log/nginx/access.log
-    tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE-nginx-access.log
+    tag: ghana-dashboard-$DEPLOYMENT_TYPE-nginx-access.log
   - path: /var/log/nginx/error.log
-    tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE-nginx-error.log
+    tag: ghana-dashboard-$DEPLOYMENT_TYPE-nginx-error.log
   - path: var/log/node*
-    tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE-node.log
+    tag: ghana-dashboard-$DEPLOYMENT_TYPE-node.log
 destination:
   host: ${PAPERTRAIL_HOST}
   port: ${PAPERTRAIL_PORT}
