@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y curl \
     gettext \
     && pip install --index-url=https://pypi.python.org/simple/ supervisor \
     && cp /usr/bin/envsubst /usr/local/bin/envsubst \
-    && npm install yarn pm2 -g \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -O -L https://github.com/papertrail/remote_syslog2/releases/download/v0.19/remote_syslog_linux_amd64.tar.gz \

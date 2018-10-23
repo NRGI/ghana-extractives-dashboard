@@ -7,8 +7,8 @@ files:
     tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE-nginx-access.log
   - path: /var/log/nginx/error.log
     tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE-nginx-error.log
-  - path: var/log/pm2/*.log
-    tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE-pm2.log
+  - path: var/log/node*
+    tag: ghana-extractive-dashboard-$DEPLOYMENT_TYPE-node.log
 destination:
   host: ${PAPERTRAIL_HOST}
   port: ${PAPERTRAIL_PORT}
