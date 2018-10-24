@@ -1,11 +1,25 @@
 @import '../../variables.scss';
 
 .NavigationComponent {
+  .container {
+    position: relative;
+    margin: 0 auto;
+  }
+
+  .navbar-start {
+    text-align: center;
+    justify-content: space-between;
+    margin: 0 auto;
+  }
+
   a.navbar-item {
     padding: 15px 20px;
     max-width: 210px;
-    display: inline;
-    font-size: .8rem;
+    display: flex;
+    font-size: .9rem;
     font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    color: #3273dc;
   }
 }

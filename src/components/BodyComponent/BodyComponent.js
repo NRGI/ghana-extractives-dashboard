@@ -67,6 +67,7 @@ class BodyComponent extends Component {
               third generation cedi (GHS)</a> at the rate of 10,000 GHC = 1 GHS. 
               The first EITI report that used third generatin cedi (GHS) was the 2005 report, 
               published in 2008. All the values in the charts are in third generation cedi (GHS).</p>
+            <br/>
           </div>
 
 

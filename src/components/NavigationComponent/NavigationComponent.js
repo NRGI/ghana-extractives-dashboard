@@ -30,7 +30,7 @@ const NavigationComponent = () => (
   <ScrollableAnchor id="home">
     <nav className="NavigationComponent navbar">
       <div className="container">
-        <div className="navbar-brand">
+        {/* <div className="navbar-brand"> */}
           {/* <a className="navbar-item" href="#home">
             <img src={logo} />
           </a> */}
@@ -39,7 +39,7 @@ const NavigationComponent = () => (
           <span></span>
           <span></span>
         </a> */}
-        </div>
+        {/* </div> */}
 
         {/* <div className="navbar-menu"> */}
         <div className="navbar-start">
