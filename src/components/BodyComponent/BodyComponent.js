@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import styles from './BodyComponent.scss'
+// import PropTypes from 'prop-types'
+import './BodyComponent.scss'
 import 'react-toggle/style.css'
 import CommoditiesComponent from '../CommoditiesComponent'
 import CompaniesComponent from '../CompaniesComponent'
 import CompaniesByCommodityComponent from '../CompaniesByCommodityComponent/CompaniesByCommodityComponent'
 import CompanyRevenuesComparisonComponent from '../CompanyRevenuesComparisonComponent/CompanyRevenuesComparisonComponent';
 import RevenueFlowsComponent from '../RevenueFlowsComponent/RevenueFlowsComponent';
-import ScrollableAnchor from 'react-scrollable-anchor';
+// import ScrollableAnchor from 'react-scrollable-anchor';
 import { reusableNestedColorScale } from '../../Scales';
 import Toggle from 'react-toggle';
 

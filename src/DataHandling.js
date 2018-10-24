@@ -52,12 +52,12 @@ export const loadAllData = () => {
     return reshapedData;
   }
 
-  const lookupName = (updatedNameLookUpSource,company_name) => {
-    // lookup updated company name from updatedNameLookUpSource.rows updated name is column 3
-    //  old name is column 2
-    // updatedNameLookUpSource, o => o[2] === company_name)[3];
-    return false;
-  }
+  // const lookupName = (updatedNameLookUpSource,company_name) => {
+  //   // lookup updated company name from updatedNameLookUpSource.rows updated name is column 3
+  //   //  old name is column 2
+  //   // updatedNameLookUpSource, o => o[2] === company_name)[3];
+  //   return false;
+  // }
 
   const reshapeGovtAgencies = (data) => {
     const reshapedData = data.map(d => {

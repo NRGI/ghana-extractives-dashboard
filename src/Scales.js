@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import _ from 'lodash';
-import { isNullOrUndefined } from 'util';
+// import { isNullOrUndefined } from 'util';
 
 const ghanaPalette = ['#f09b37','#348673','#febe0c','#1d4677','#009B3A','#ce1126']
 

@@ -1,8 +1,8 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import styles from './FooterComponent.scss'
+// import PropTypes from 'prop-types'
+import './FooterComponent.scss'
 
-const FooterComponent = ({ }) => (
+const FooterComponent = () => (
   <div className="FooterComponent footer columns">
     <div className="column">
       <p>The Ghana Extractive Industries Transparency Initiative (GHEITI)<br />
@@ -13,8 +13,9 @@ const FooterComponent = ({ }) => (
     </div>
     <div className="column">
       <p>&copy; Natural Resource Governance Institute 2018</p>
-      <p>Openly licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike License</a></p>
-      <p><label className='label'>Disclaimer: </label>The accuracy and/or completeness of data provided is not guaranteed. Users should always check against original sources before making decisions based upon the data presented</p>
+      <p>Openly licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike License</a></p>
+      <br/>
+      <p><label className='label'>Disclaimer </label>The accuracy and/or completeness of data provided is not guaranteed. Users should always check against original sources before making decisions based upon the data presented</p>
     </div>
   </div>
 );

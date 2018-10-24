@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styles from './RevenueFlowsComponent.scss'
+import './RevenueFlowsComponent.scss'
 import Slider, { createSliderWithTooltip } from 'rc-slider'
 import ReactSVG from 'react-svg'
 import LoadingBar from 'loading-svg/loading-bars.svg'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
-import StackedAreaChart from '../StackedAreaChart/StackedAreaChart';
-import { nest } from 'd3-collection';
-import { prepSankeyChartData, getCurrencyValue } from '../../DataPrepHelpers';
+// import { nest } from 'd3-collection';
+import { prepSankeyChartData, fixFileName } from '../../DataPrepHelpers';
 import Select from 'react-select';
 import SankeyChart from '../SankeyChart/SankeyChart';
 import ScrollableAnchor from 'react-scrollable-anchor';
@@ -43,7 +42,7 @@ class RevenueFlowsComponent extends Component {
     const cNameArray = Array.isArray(cName) ? cName : [cName];
     range = Array.isArray(range) ? range : [range];
 
-    console.log(cNameArray);
+    // console.log(cNameArray);
     const
       yearPick = range[0] || 2004;
     return [
@@ -79,8 +78,7 @@ class RevenueFlowsComponent extends Component {
   }
 
   render() {
-    const { uniqueCommodities, uniqueYears, uniqueCompanies, currencyValue,
-      uniquePaymentStreams, reusableNestedColorScale } = this.props;
+    const { uniqueCompanies, currencyValue } = this.props;
     const isLoading = !!(this.props.companyPayments.length
       && this.props.govtAgencies.length) ? false : true;
 
@@ -96,6 +94,8 @@ class RevenueFlowsComponent extends Component {
                 ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
                 :
                 <div className="column control">
+                  <p>This chart shows how different revenue streams flow from the companies to different government departments.</p>
+                  <br/>
                   <label className="label">Use slider to select year to display.  <br/>
                   Current selection: {!!this.state.range[0] ? this.state.range[0] :this.state.range}</label>
                   <br />
@@ -121,7 +121,7 @@ class RevenueFlowsComponent extends Component {
                     <Select
                       onChange={(options) => {
                         this.handleLog(options);
-                        const val = options.map(o => o.value);
+                        // const val = options.map(o => o.value);
                         this.setState({ cName: [...options.map(o => o.value)] });
                       }}
                       options={uniqueCompanies.map((company) => ({ value: company, label: company }))}
@@ -149,14 +149,15 @@ class RevenueFlowsComponent extends Component {
                   nestedColorScale={reusableNestedColorScale(uniqueCommodities)} 
                   size={[500,500]} /> */}
                     {/* </div> */}
-                    {console.log(this.props.companyPayments, this.props.govtAgencies)}
+                    {/* {console.log(this.props.companyPayments, this.props.govtAgencies)} */}
                     <SankeyChart
                       data={prepSankeyChartData(
                         this.handleFilter(this.state.cName, this.state.range),
                         currencyValue
                       )}
                       size={[900, 500]}
-                      currencyValue={currencyValue} />
+                      currencyValue={currencyValue}
+                      csvName={fixFileName("Company and Government Revenue Flows")} />
                   </div>
 
                   {/* {JSON.stringify(companyPayments)} */}

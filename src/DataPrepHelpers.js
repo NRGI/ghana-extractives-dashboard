@@ -127,3 +127,8 @@ export const makeLegend = (keys,node,width,margin,scale) => {
       .call(legendOrdinal);
   }
 }
+
+export const fixFileName = (name) => name
+  .replace(delimiter,"-")
+  .replace(/\s+/g,"_")
+  .replace(/,/g,"");

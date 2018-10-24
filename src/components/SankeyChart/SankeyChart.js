@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import styles from './SankeyChart.scss'
-import { CSVLink, CSVDownload } from "react-csv";
-import { stack, area, curveMonotoneX } from 'd3-shape'
-import { max } from 'd3-array'
-import { select, selectAll, mouse, event } from 'd3-selection'
-import { axisBottom, axisLeft } from 'd3-axis'
+// import PropTypes from 'prop-types'
+// import styles from './SankeyChart.scss'
+import { CSVLink } from "react-csv";
+// import { stack, area, curveMonotoneX } from 'd3-shape'
+// import { max } from 'd3-array'
+import { select } from 'd3-selection'
+// import { axisBottom, axisLeft } from 'd3-axis'
 import { format } from 'd3-format'
 import { default as tip } from 'd3-tip'
 import { sankey, sankeyLinkHorizontal, sankeyRight } from 'd3-sankey'
-import { drag } from 'd3-drag'
+// import { drag } from 'd3-drag'
 import _ from 'lodash';
-import { scaleOrdinal, scaleBand } from 'd3-scale';
-import { rgb } from 'd3-color';
-import { schemeCategory10 } from 'd3-scale-chromatic'
+// import { scaleOrdinal, scaleBand } from 'd3-scale';
+// import { rgb } from 'd3-color';
+// import { schemeCategory10 } from 'd3-scale-chromatic'
 
 class SankeyChart extends Component {
   constructor(props) {
@@ -43,32 +43,32 @@ class SankeyChart extends Component {
     const nodePadding = 15;
     const shiftDown = 20;
     
-    const tempData = {
-      nodes:[
-      {"node":0,"name":"node0"},
-      {"node":1,"name":"node1"},
-      {"node":2,"name":"node2"},
-      {"node":3,"name":"node3"},
-      {"node":4,"name":"node4"}
-      ],
-      links:[
-      {"source":0,"target":2,"value":1},
-      {"source":1,"target":2,"value":1},
-      {"source":1,"target":3,"value":1},
-      {"source":0,"target":4,"value":1},
-      {"source":2,"target":3,"value":1},
-      {"source":2,"target":4,"value":1},
-      {"source":3,"target":4,"value":1.7}
-      ]
-    }
+    // const tempData = {
+    //   nodes:[
+    //   {"node":0,"name":"node0"},
+    //   {"node":1,"name":"node1"},
+    //   {"node":2,"name":"node2"},
+    //   {"node":3,"name":"node3"},
+    //   {"node":4,"name":"node4"}
+    //   ],
+    //   links:[
+    //   {"source":0,"target":2,"value":1},
+    //   {"source":1,"target":2,"value":1},
+    //   {"source":1,"target":3,"value":1},
+    //   {"source":0,"target":4,"value":1},
+    //   {"source":2,"target":3,"value":1},
+    //   {"source":2,"target":4,"value":1},
+    //   {"source":3,"target":4,"value":1.7}
+    //   ]
+    // }
 
     // const data = tempData;
     const data = this.props.data;
 
-    const formatter = (d) => {
-      const f = format(",.0f");
-      return d => `${f(d)} TWh`;
-    }
+    // const formatter = (d) => {
+    //   const f = format(",.0f");
+    //   return d => `${f(d)} TWh`;
+    // }
 
     let tooltip = tip()
         .attr('class', 'd3-tip')
@@ -195,7 +195,7 @@ class SankeyChart extends Component {
       <br/>
       <CSVLink 
         data={this.props.data.links.map(d => _.pick(d, ['sourceName','targetName','value']))}
-        filename={"ghana-eiti.csv"}>Download above chart's data as CSV</CSVLink>
+        filename={this.props.csvName+".csv"}>Download above chart's data as CSV</CSVLink>
       <br/>
       <br/>
       </div>
