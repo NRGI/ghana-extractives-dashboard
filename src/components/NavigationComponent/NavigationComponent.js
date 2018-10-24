@@ -1,8 +1,7 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import styles from './NavigationComponent.scss'
+// import PropTypes from 'prop-types'
+import './NavigationComponent.scss'
 import ScrollableAnchor from 'react-scrollable-anchor/lib/ScrollableAnchor';
-import logo from '../../gheiti_logo.png'
 
 const sections = [
   {
@@ -27,14 +26,14 @@ const sections = [
   }
 ]
 
-const NavigationComponent = ({ }) => (
+const NavigationComponent = () => (
   <ScrollableAnchor id="home">
     <nav className="NavigationComponent navbar">
       <div className="container">
         <div className="navbar-brand">
-          <a className="navbar-item" href="#home">
+          {/* <a className="navbar-item" href="#home">
             <img src={logo} />
-          </a>
+          </a> */}
           {/* <a role="button" className="navbar-burger burger">
           <span></span>
           <span></span>
@@ -56,17 +55,6 @@ NavigationComponent.propTypes = {}
 
 NavigationComponent.defaultProps = {}
 
-// const cats = () => (
-//   <nav className="NavigationComponent">
-//     <ul>
-//       {sections.map((section, index) =>
-//         <li key={index}>
-//           {/* <button onClick={event => console.log(event.target)}>{section.name}</button> */}
-//           <a href={section.path}>{section.name}</a>
-//         </li>)
-//       }
-//     </ul>
-//   </nav>
-// )
+
 
 export default NavigationComponent

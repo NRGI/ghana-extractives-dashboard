@@ -1,12 +1,13 @@
 .BodyComponent{
   h2.title.is-3{
-    max-width: 320px;
+    // max-width: 320px;
     margin: 0 auto;
     text-align: center;
+    padding-bottom: 30px;
   }
   &>.container{
     &>div{
-      padding: 40px 0;
+      padding: 20px 0;
     }
   }
 }

@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import styles from './CompanyRevenuesComparisonComponent.scss'
+import './CompanyRevenuesComparisonComponent.scss'
 import Slider, { createSliderWithTooltip } from 'rc-slider'
 import ReactSVG from 'react-svg'
 import LoadingBar from 'loading-svg/loading-bars.svg'
 import 'rc-slider/assets/index.css';
 import 'rc-tooltip/assets/bootstrap_white.css';
 import StackedAreaChart from '../StackedAreaChart/StackedAreaChart';
-import { nest } from 'd3-collection';
-import { prepVarVsYearChartData, getCurrencyValue } from '../../DataPrepHelpers';
+// import { nest } from 'd3-collection';
+import { prepVarVsYearChartData, fixFileName } from '../../DataPrepHelpers';
 import Select from 'react-select';
 import ScrollableAnchor from 'react-scrollable-anchor';
 const Range = createSliderWithTooltip(Slider.Range);
@@ -41,7 +41,7 @@ class CompanyRevenuesComparisonComponent extends Component {
 
     const cNameArray = Array.isArray(cName) ? cName : [cName];
 
-    console.log(cNameArray);
+    // console.log(cNameArray);
     const
       min = range[0] || 2004,
       max = range[1] || 2014;
@@ -89,6 +89,8 @@ class CompanyRevenuesComparisonComponent extends Component {
                 ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
                 :
                 <div className="column control">
+                <p>This chart allows you to compare the aggregate revenues obtained from different companies.</p>
+                <br/>
                   <label className="label">Use slider to select years to display. <br/>
                   Current selection: {this.state.range[0]} to {this.state.range[1]}</label>
                   <br />
@@ -111,7 +113,7 @@ class CompanyRevenuesComparisonComponent extends Component {
                     <Select
                       onChange={(options) => {
                         this.handleLog(options);
-                        const val = options.map(o => o.value);
+                        // const val = options.map(o => o.value);
                         this.setState({ cName: [...options.map(o => o.value)] });
                       }}
                       options={uniqueCompanies.map((c) => ({ value: c, label: c }))}
@@ -139,7 +141,8 @@ class CompanyRevenuesComparisonComponent extends Component {
                       uniqueYears={uniqueYears}
                       nestedColorScale={reusableNestedColorScale(uniqueCompanies)}
                       currencyValue={currencyValue}
-                      size={[500, 500]} />
+                      size={[500, 500]}
+                      csvName={fixFileName("Company Revenues Comparison")} />
 
 
                     <div className="small-multiples-list">
@@ -160,7 +163,8 @@ class CompanyRevenuesComparisonComponent extends Component {
                             uniqueYears={uniqueYears}
                             nestedColorScale={reusableNestedColorScale(uniqueCompanies)}
                             currencyValue={currencyValue}
-                            size={[500, 200]} />
+                            size={[500, 200]}
+                            csvName={fixFileName(item)} />
                         </div>
                         ))
                       : ''

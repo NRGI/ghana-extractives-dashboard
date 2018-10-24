@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import styles from './StackedBarChart.scss'
-import { CSVLink, CSVDownload } from "react-csv";
-import { scaleLinear, scaleBand, scaleOrdinal } from 'd3-scale'
+// import PropTypes from 'prop-types'
+// import styles from './StackedBarChart.scss'
+import { CSVLink } from "react-csv";
+import { scaleLinear, scaleBand } from 'd3-scale'
 import { stack } from 'd3-shape'
 import { max } from 'd3-array'
 import { select } from 'd3-selection'
@@ -31,10 +31,10 @@ class StackedBarChart extends Component {
   
   createBarChart() {
 
-  const { data, nestedColorScale, uniquePaymentStreams, uniqueYears } = this.props;
+  const { data, nestedColorScale, uniqueYears } = this.props;
 
   const 
-    margin = {top: 20, right: 25, bottom: 70, left: 100},
+    margin = {top: 20, right: 25, bottom: 30, left: 100},
     height = this.props.size[1],
     node = select(this.node);
 
@@ -120,9 +120,7 @@ class StackedBarChart extends Component {
   g.append("g")
     .selectAll("g")
     .data(stack()
-      .keys(() => {return keys})
-      // .value((d,key) => {console.log(d[key]);return d[key];})
-      (data)
+      .keys(() => {return keys})(data)
     )
     .enter().append("g")
       .attr("fill", function(d) { return z(d.key); })
@@ -177,7 +175,7 @@ class StackedBarChart extends Component {
       <br/>
       <CSVLink 
         data={this.props.data}
-        filename={"ghana-eiti.csv"}>Download above chart's data as CSV</CSVLink>
+        filename={this.props.csvName+".csv"}>Download above chart's data as CSV</CSVLink>
       <br/>
       <br/>
     </div>
