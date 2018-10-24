@@ -10,6 +10,7 @@ import { axisBottom, axisLeft } from 'd3-axis'
 import { format } from 'd3-format'
 import { default as tip } from 'd3-tip'
 import _ from 'lodash';
+import { makeLegend } from '../../DataPrepHelpers'
 
 
 class StackedBarChart extends Component {
@@ -33,7 +34,7 @@ class StackedBarChart extends Component {
   const { data, nestedColorScale, uniquePaymentStreams, uniqueYears } = this.props;
 
   const 
-    margin = {top: 20, right: 20, bottom: 70, left: 100},
+    margin = {top: 20, right: 25, bottom: 70, left: 100},
     height = this.props.size[1],
     node = select(this.node);
 
@@ -162,12 +163,16 @@ class StackedBarChart extends Component {
       .attr("font-weight", "bold")
       .attr("text-anchor", "start")
       .text("Revenue ("+this.props.currencyValue+")");
+
+
+    makeLegend(keys,node,width,margin,nestedColorScale);
+
   }
   
   render() {
     return <div>
       <svg className="StackedBarChart" ref={node => this.node = node}
-        width={700} height={this.props.size[1]}>
+        width={1000} height={this.props.size[1]}>
       </svg>
       <br/>
       <CSVLink 
