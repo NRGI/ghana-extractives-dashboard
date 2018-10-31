@@ -1,7 +1,7 @@
 {
   "name": "ghana-extractives-dashboard",
   "version": "0.1.0",
-  "homepage": "http://staging.ghana.resourcedata.org/",
+  "homepage": "http://nrgi.github.io/",
   "private": true,
   "dependencies": {
     "ajv-keywords": "^3.2.0",
