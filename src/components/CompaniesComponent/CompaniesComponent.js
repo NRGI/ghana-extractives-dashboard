@@ -105,7 +105,7 @@ class CompaniesComponent extends Component {
               ? <ReactSVG src={LoadingBar} className="svg-container " svgClassName="loading-bars" />
               : 
                 <div className="column control">
-                <p>This chart breaks down the different types of revenues streams obatined from companies in the extractives sector.</p>
+                <p>This chart breaks down the different types of revenues streams obtained from companies in the extractives sector.</p>
                 <br/>
                 <label className="label">Use slider to select years to display.  <br/>
                   Current selection: {this.state.range[0]} to {this.state.range[1]}</label>
