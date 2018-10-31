@@ -7,6 +7,7 @@ import BodyComponent from './components/BodyComponent';
 import FooterComponent from './components/FooterComponent';
 import { loadAllData } from './DataHandling';
 import { reusableNestedColorScale } from './Scales';
+import ReactGA from 'react-ga';
 
 class App extends Component {
 
@@ -17,7 +18,10 @@ class App extends Component {
     }
   }
 
-  componentDidMount() { this.getData() }
+  componentDidMount() { 
+    this.getData();
+    this.initializeReactGA();
+  }
 
   getData() {
     loadAllData()
@@ -30,6 +34,12 @@ class App extends Component {
               () => console.log(`(mutatedData === data) : ${this.state.mutatedData === this.state.data}`))
           }
         ))
+  }
+
+  initializeReactGA() {
+    // ReactGA.initialize('UA-128077154-1'); // Tracking ID obtained using Yan's GA account
+    ReactGA.initialize('UA-128089151-1');
+    ReactGA.pageview('/homepage');
   }
 
   // handleClearCompanyFilters() {
