@@ -35,9 +35,16 @@ export const loadAllData = () => {
   )
 
   const reshapeCompanyPayments = (data,updatedNameLookUpSource) => {
+    console.log(data);
+    console.log(updatedNameLookUpSource);
     const reshapedData = data.map(d => {
+
+      let company_name = _.find(updatedNameLookUpSource.rows, o => o[2] === d.company_name)
+      company_name = company_name ? company_name[3] : d.company_name;
+
+      console.log(company_name);
       return {
-        company_name: _.find(updatedNameLookUpSource.rows, o => o[2] === d.company_name)[3],
+        company_name: company_name,
         currency_rate: handleGHSConversion(+d.currency_rate,+d.year),
         value_reported: handleGHSConversion(+d.value_reported,+d.year),
         value_reported_as_USD: +d.value_reported_as_USD,
@@ -173,6 +180,7 @@ export const loadAllData = () => {
   
   return Promise.all(promises).then(function(values) {
     const result = {};  
+
     const tempCompanyPayments = reshapeCompanyPayments(values[0],values[2]);
     result.govtAgencies = reshapeGovtAgencies(values[1]);
     result.commodities = reshapeCommodities(values[2]);
