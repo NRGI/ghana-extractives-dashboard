@@ -31,7 +31,7 @@ class CommoditiesComponent extends Component {
   }
 
   static defaultProps = {
-    range: [2004, 2014],
+    range: [2004, 2016],
     cName: []
   }
   static propTypes = {
@@ -56,7 +56,7 @@ class CommoditiesComponent extends Component {
     // console.log(cNameArray);
     const
       min = range[0] || 2004,
-      max = range[1] || 2014;
+      max = range[1] || 2016;
     return this.props.companyPayments
       .filter(c => c.year >= min) // cut off minimum
       .filter(c => c.year <= max) // cutt off maximum

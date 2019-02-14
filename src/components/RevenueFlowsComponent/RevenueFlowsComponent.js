@@ -67,7 +67,7 @@ class RevenueFlowsComponent extends Component {
   handleLog = (msg) => console.log(msg);
 
   static defaultProps = {
-    range: [2004, 2014],
+    range: [2004, 2016],
     cName: []
   }
   static propTypes = {
